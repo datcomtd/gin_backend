@@ -45,7 +45,7 @@ func AddEdital(c *gin.Context) {
 		return
 	}
 
-	edital = models.Document{Title: body.Title, Description: body.Description}
+	edital = models.Document{Title: body.Title, Description: body.Description, Active: true}
 
 	// salva no DB
 	result = initializers.DB.Create(&edital)

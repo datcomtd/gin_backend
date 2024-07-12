@@ -21,6 +21,7 @@ func main() {
 
 	// Editais endpoints
 	router.GET("/api/editais/", endpoints.GetEditais)
+	router.POST("/api/editais/add", endpoints.AddEdital)
 
 	router.Run("localhost:8000")
 }

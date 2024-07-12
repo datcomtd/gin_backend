@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"datcomtd/backend/endpoints"
 	"datcomtd/backend/initializers"
+	"datcomtd/backend/utils"
 )
 
 func init() {
@@ -17,7 +17,7 @@ func main() {
 
 	// CORS - Cross Origin Resource Share
 	// default permite todas as origens
-	router.Use(cors.Default())
+	router.Use(utils.CORSMiddleware())
 
 	// Editais endpoints
 	router.GET("/api/editais/", endpoints.GetEditais)

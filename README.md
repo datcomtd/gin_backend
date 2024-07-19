@@ -9,6 +9,12 @@ $ go get .
 $ go run migrate/migrate.go
 ```
 
+Para resetar o banco de dados:
+
+```bash
+$ ./reset.sh
+```
+
 Inicie o servidor:
 
 ```bash

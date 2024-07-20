@@ -29,3 +29,14 @@ function get_token() {
     http://localhost:8000/api/token | jq '.'
   echo
 }
+
+function update_user() {
+  username="${1}"
+  shift
+
+  curl -s -L \
+    -X POST -H "Content-Type: application/json" \
+    -d "${*}" \
+    http://localhost:8000/api/user/${username}/update | jq '.'
+  echo
+}

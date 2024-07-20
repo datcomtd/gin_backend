@@ -14,7 +14,7 @@ import (
 )
 
 //
-// Register (POST RegisterRequest)
+// Register (POST registerRequest)
 //  0. retrieve post data
 //  1. check if the required fields are filled
 //  2. check if the user is already registered
@@ -22,7 +22,7 @@ import (
 //  4. create a record in the database
 //
 
-type RegisterRequest struct {
+type registerRequest struct {
 	Body string
 
 	Password string `json:"password"`
@@ -35,7 +35,7 @@ type RegisterRequest struct {
 }
 
 func Register(c *gin.Context) {
-	var body RegisterRequest
+	var body registerRequest
 	var user models.User
 
 	// 0. retrieve post data

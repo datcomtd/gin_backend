@@ -11,8 +11,11 @@ add_user "{\"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1,
 Print "list user: patrick"
 list_user "patrick"
 
-Print "list all users"
-list_users
-
 Print "get patrick's token"
 get_token "{\"username\": \"patrick\", \"password\": \"patrick123\"}"
+
+Print "update patrick record"
+update_user "patrick" "{\"username\": \"patrick\", \"password\": \"patrick123\", \"email\": \"newemail@gmail.com\"}"
+
+Print "list user: patrick"
+list_user "patrick"

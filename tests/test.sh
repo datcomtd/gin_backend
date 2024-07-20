@@ -31,3 +31,6 @@ upload_document "${key}" "${token}" "text.txt"
 
 Print "list all documents"
 list_documents
+
+Print "deleting the document"
+delete_document "${token}" "{\"id\": 1}"

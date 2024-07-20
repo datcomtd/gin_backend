@@ -8,11 +8,11 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 15       | 814    | 160    | 145 |
-| Bash      | 3        | 131    | 16     | 5 |
-| Markdown  | 1        | 371    | 70     | 0 |
+| Go        | 16       | 896    | 176    | 162 |
+| Bash      | 3        | 146    | 18     | 5 |
+| Markdown  | 1        | 400    | 75     | 0 |
 | Text      | 1        | 1      | 0      | 0 |
-| **Total** | **20** | **1317** | **246** | **150** |
+| **Total** | **21** | **1443** | **269** | **167** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -31,6 +31,7 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | /api/document/by-id/\<id\>             | GET     | x     | x |
 | /api/document/by-category/\<category\> | GET     | x     | x |
 | /api/document/upload/{\<key\>}         | POST    | o     | x |
+| /api/document/delete                   | POST    | o     | x |
 
 ## Instruções
 
@@ -205,7 +206,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 
 ```json
 {
-  "message": "deleted successfully"
+  "message": "user deleted"
 }
 ```
 
@@ -214,7 +215,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 400    | Bad Request    | required fields are not filled |
 | 401    | Unauthorized   | invalid username or password |
 | 500    | Internal Error | failed deleting the record |
-| 200    | OK             | deleted successfully |
+| 200    | OK             | user deleted |
 
 ### DOCUMENT endpoints
 
@@ -365,6 +366,34 @@ $ curl -s -L -X POST \
 | 500    | Internal Error | failed saving the document |
 | 200    | OK             | (for the key step) |
 | 201    | Created        | (document uploaded) |
+
+#### /api/document/delete
+
+Deleta um documento.
+
+```bash
+$ curl -s -L -X POST \
+    -H "Authorization: \<token\>" \
+    -H "Content-Type: application/json" \
+    -d "{\"id\": 1}" \
+    http://localhost:8000/api/document/delete | jq '.'
+```
+
+```json
+{
+  "message": "document deleted"
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 401    | Unauthorized   | invalid token |
+| 403    | Forbidden      | user is not the document's creator |
+| 404    | Not Found      | document not found |
+| 500    | Internal Error | failed deleting the document |
+| 500    | Internal Error | failed deleting the record |
+| 200    | OK             | document deleted |
 
 ## TODO
 

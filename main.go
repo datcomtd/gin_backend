@@ -35,6 +35,7 @@ func main() {
 	router.GET("/api/document/by-category/:category", endpoints.GetDocumentsByCategory)
 	router.POST("/api/document/upload", endpoints.GenerateKey)
 	router.POST("/api/document/upload/:key", endpoints.UploadDocument)
+	router.POST("/api/document/delete", endpoints.DeleteDocument)
 
 	router.Run("localhost:8000")
 }

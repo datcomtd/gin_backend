@@ -92,3 +92,14 @@ function list_documents() {
   curl -s -L http://localhost:8000/api/documents | jq '.'
   echo
 }
+
+function delete_document() {
+  token="${1}"
+  shift
+
+  curl -s -L -X POST -H "Content-Type: application/json" \
+    -H "Authorization: ${token}" \
+    -d "${*}" \
+    http://localhost:8000/api/document/delete | jq '.'
+  echo
+}

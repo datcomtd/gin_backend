@@ -21,6 +21,8 @@ import (
 //
 
 type deleteRequest struct {
+	Body string
+
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
@@ -59,5 +61,5 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "user deleted"})
 }

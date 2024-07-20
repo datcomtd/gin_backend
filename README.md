@@ -4,9 +4,19 @@
 
 Esse repositório contém uma implementação de uma REST API para o backend do site do DATCOM-TD. Foi escrito em [Go](https://go.dev/) utilizando o framework [Gin](https://github.com/gin-gonic/gin/).
 
-As rotas (endpoints) implementadas estão listadas na tabela abaixo:
+Estatisticas:
 
-| Endpoint                | Request | Token | Auth |
+| Linguagem | Arquivos | Linhas | Blanks | Comentários |
+|:---------:|:--------:|:------:|:------:|:-----------:|
+| Go        | 15       | 800    | 158    | 141 |
+| Bash      | 3        | 131    | 16     | 5 |
+| Markdown  | 1        | 359    | 68     | 0 |
+| Text      | 1        | 1      | 0      | 0 |
+| **Total** | **20** | **1291** | **242** | **146** |
+
+As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
+
+| USER Endpoint           | Request | Token | Auth |
 |:------------------------|:-------:|:-----:|:----:|
 | /api/register           | POST    | x     | x |
 | /api/token              | POST    | x     | o |
@@ -14,6 +24,9 @@ As rotas (endpoints) implementadas estão listadas na tabela abaixo:
 | /api/user/\<username\>  | GET     | x     | x |
 | /api/user/update        | POST    | x     | o |
 | /api/user/delete        | POST    | x     | o |
+
+| DOCUMENT Endpoint                      | Request | Token | Auth |
+|:---------------------------------------|:-------:|:-----:|:----:|
 | /api/documents                         | GET     | x     | x |
 | /api/document/by-id/\<id\>             | GET     | x     | x |
 | /api/document/by-category/\<category\> | GET     | x     | x |
@@ -241,7 +254,7 @@ $ curl -s -L http://localhost:8000/api/documents | jq '.'
 Obtém as informações de um documento.
 
 ```bash
-$ curl -s -L http://localhost:8000/api/document/by-id/nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM | jq '.'
+$ curl -s -L http://localhost:8000/api/document/by-id/1 | jq '.'
 ```
 
 ```json

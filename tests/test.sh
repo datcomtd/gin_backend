@@ -19,3 +19,12 @@ update_user "patrick" "{\"username\": \"patrick\", \"password\": \"patrick123\",
 
 Print "list user: patrick"
 list_user "patrick"
+
+Print "add user: alexandre"
+add_user "{\"username\": \"alexandre\", \"password\": \"alexandre123\", \"role\": 2, \"course\": 1}"
+
+Print "delete user: patrick"
+delete_user "patrick" "patrick123"
+
+Print "list all users"
+list_users

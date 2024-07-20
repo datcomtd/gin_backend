@@ -6,13 +6,14 @@ Esse repositório contém uma implementação de uma REST API para o backend do 
 
 As rotas (endpoints) implementadas estão listadas na tabela abaixo:
 
-| Endpoint                      | Request | Token | Auth |
-|:------------------------------|:-------:|:-----:|:----:|
-| /api/register                 | POST    | x     | x |
-| /api/token                    | POST    | x     | o |
-| /api/users                    | GET     | x     | x |
-| /api/user/\<username\>        | GET     | x     | x |
-| /api/user/\<username\>/update | POST    | x     | o |
+| Endpoint                | Request | Token | Auth |
+|:------------------------|:-------:|:-----:|:----:|
+| /api/register           | POST    | x     | x |
+| /api/token              | POST    | x     | o |
+| /api/users              | GET     | x     | x |
+| /api/user/\<username\>  | GET     | x     | x |
+| /api/user/update        | POST    | x     | o |
+| /api/user/delete        | POST    | x     | o |
 
 ## Instruções
 
@@ -66,7 +67,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
   http://localhost:8000/api/register | jq '.'
 ```
 
-```
+```json
 {
   "user": {
     "CreatedAt": "2024-07-19T22:44:22.11276403-03:00",
@@ -101,7 +102,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
   http://localhost:8000/api/token | jq '.'
 ```
 
-```
+```json
 {
   "token": "VUVJsMvvLUSOicICknLsJpARmNnCXfAallxEeySjVksVsCadBDoGvQftSisiooXj"
 }
@@ -122,7 +123,7 @@ Obtém as informações públicas de algum usuário.
 $ curl -s -L http://localhost:8000/api/user/patrick | jq '.'
 ```
 
-```
+```json
 {
   "user": {
     "name": "patrick",
@@ -138,7 +139,7 @@ $ curl -s -L http://localhost:8000/api/user/patrick | jq '.'
 | 404    | Not Found      | user not found |
 | 200    | OK             | - |
 
-#### /api/user/\<username\>/update
+#### /api/user/update
 
 Atualiza as informações de um usuário.  
 Use newpassword para atualizar a senha ao invés de password, que foi reservado para a autentificação por post request.
@@ -146,11 +147,11 @@ Use newpassword para atualizar a senha ao invés de password, que foi reservado 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
   -d "{\"username\": \"patrick\", \"password\": \"patrick123\", \"email\": \"newemail@gmail.com\"}" \
-  http://localhost:8000/api/user/patrick/update | jq '.'
+  http://localhost:8000/api/user/update | jq '.'
 
 ```
 
-```
+```json
 {
   "user": {
     "CreatedAt": "2024-07-20T02:32:21.950871021-03:00",
@@ -173,6 +174,30 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 500    | Internal Error | failed hashing the password |
 | 500    | Internal Error | failed updating the record |
 | 200    | OK             | - |
+
+#### /api/user/delete
+
+Deleta algum usuário do banco de dados.  
+Não foi implementado nenhum tipo de soft delete, então a remoção é permanente.
+
+```bash
+$ curl -s -L -X POST -H "Content-Type: application/json" \
+  -d "{\"username\": \"patrick\", \"password\": \"patrick123\"}" \
+  http://localhost:8000/api/user/delete | jq '.'
+```
+
+```json
+{
+  "message": "deleted successfully"
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 401    | Unauthorized   | invalid username or password |
+| 500    | Internal Error | failed deleting the record |
+| 200    | OK             | deleted successfully |
 
 ## TODO
 

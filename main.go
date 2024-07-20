@@ -26,7 +26,8 @@ func main() {
 	// Members endpoints
 	router.GET("/api/users", endpoints.GetUsers)
 	router.GET("/api/user/:username", endpoints.GetUserByUsername)
-	router.POST("/api/user/:username/update", endpoints.UpdateUser)
+	router.POST("/api/user/update", endpoints.UpdateUser)
+	router.POST("/api/user/delete", endpoints.DeleteUser)
 
 	router.Run("localhost:8000")
 }

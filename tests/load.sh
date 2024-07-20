@@ -31,12 +31,22 @@ function get_token() {
 }
 
 function update_user() {
+  curl -s -L \
+    -X POST -H "Content-Type: application/json" \
+    -d "${*}" \
+    http://localhost:8000/api/user/update | jq '.'
+  echo
+}
+
+function delete_user() {
   username="${1}"
+  shift
+  password="${1}"
   shift
 
   curl -s -L \
     -X POST -H "Content-Type: application/json" \
-    -d "${*}" \
-    http://localhost:8000/api/user/${username}/update | jq '.'
+    -d "{\"username\": \"${username}\", \"password\": \"${password}\"}" \
+    http://localhost:8000/api/user/delete | jq '.'
   echo
 }

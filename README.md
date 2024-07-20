@@ -8,11 +8,11 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 15       | 800    | 158    | 141 |
+| Go        | 15       | 814    | 160    | 145 |
 | Bash      | 3        | 131    | 16     | 5 |
-| Markdown  | 1        | 359    | 68     | 0 |
+| Markdown  | 1        | 371    | 70     | 0 |
 | Text      | 1        | 1      | 0      | 0 |
-| **Total** | **20** | **1291** | **242** | **146** |
+| **Total** | **20** | **1317** | **246** | **150** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -360,6 +360,7 @@ $ curl -s -L -X POST \
 | 400    | Bad Request    | invalid document |
 | 401    | Unauthorized   | invalid token |
 | 401    | Unauthorized   | invalid key |
+| 403    | Forbidden      | user does not have permission |
 | 500    | Internal Error | failed creating the record |
 | 500    | Internal Error | failed saving the document |
 | 200    | OK             | (for the key step) |

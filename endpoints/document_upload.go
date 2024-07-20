@@ -16,17 +16,19 @@ import (
 //  0. retrieve post data
 //  1. check if the required fields are filled
 //  2. check if the token is valid
-//  3. check if it is already uploaded
-//  4. create a new document record in the database
-//  5. return the key to upload the file
+//  3. check if the user has permission to upload a document
+//  4. check if the file is already uploaded
+//  5. create a new document record in the database
+//  6. return the key to upload the file
 //
 // UploadDocument (POST f:file)
 //  1. check if the token is valid
-//  2. check if the key is not empty
-//  3. check if the key exists
-//  4. check if the key is valid
-//  5. get the file
-//  6. save the file
+//  2. check if the user has permission to upload a document
+//  3. check if the key is not empty
+//  4. check if the key exists
+//  5. check if the key is valid
+//  6. get the file
+//  7. save the file
 //
 
 type uploadRequest struct {
@@ -53,21 +55,27 @@ func GenerateKey(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid and get the token's username
-	username, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
-	// 3. check if it is already uploaded
+	// 3. check if the user has permission to upload a document
+	if userrole > 6 {
+		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
+		return
+	}
+
+	// 4. check if the file is already uploaded
 	result := initializers.DB.Model(&models.Document{}).Where("title = ?", body.Title).First(&document)
 	if result.Error == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "file already exists"})
 		return
 	}
 
-	// 4. create a new document record in the database
-	// 4.1. new document model
+	// 5. create a new document record in the database
+	// 5.1. new document model
 	document = models.Document{
 		Key:           utils.RandomString(32),
 		Title:         body.Title,
@@ -77,14 +85,14 @@ func GenerateKey(c *gin.Context) {
 		CreatedBy:     username,
 		LastUpdatedBy: username,
 	}
-	// 4.2. insert the model into the database
+	// 5.2. insert the model into the database
 	result = initializers.DB.Create(&document)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed creating the record"})
 		return
 	}
 
-	// 5. return the key to upload the file
+	// 6. return the key to upload the file
 	c.JSON(http.StatusOK, gin.H{"key": document.Key})
 }
 
@@ -92,40 +100,46 @@ func UploadDocument(c *gin.Context) {
 	var document models.Document
 
 	// 1. check if the token is valid
-	username, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
-	// 2. check if the key is not empty
+	// 2. check if the user has permission to upload a document
+	if userrole > 6 {
+		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
+		return
+	}
+
+	// 3. check if the key is not empty
 	key := c.Param("key")
 	if key == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid key"})
 		return
 	}
 
-	// 3. check if the key exists
+	// 4. check if the key exists
 	result := initializers.DB.Model(&models.Document{}).Where("key = ?", c.Param("key")).First(&document)
 	if result.Error != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid key"})
 		return
 	}
 
-	// 4. check if the key is valid
+	// 5. check if the key is valid
 	if key != document.Key {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid key"})
 		return
 	}
 
-	// 5. get the file
+	// 6. get the file
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid document"})
 		return
 	}
 
-	// 6. save the file
+	// 7. save the file
 	err = c.SaveUploadedFile(file, "./media/"+document.Key)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed saving the document"})

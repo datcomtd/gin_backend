@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source test_cases/load.sh
+source ./load.sh
 
 #Print "should return 'required fields are not filled'"
 #add_user "{\"username\": \"patrick\", \"password\": \"patrick123\", \"course\": 1}"

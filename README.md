@@ -59,7 +59,7 @@ curl -s -L -X POST -H "Content-Type: application/json" \
 | 400    | Bad Request    | user is already registered |
 | 500    | Internal Error | failed hashing the password |
 | 500    | Internal Error | failed creating the record |
-| 201    | Created        | success |
+| 201    | Created        | - |
 
 #### /api/token
 
@@ -82,7 +82,7 @@ curl -s -L -X POST -H "Content-Type: application/json" \
 | 400    | Bad Request    | required fields are not filled |
 | 401    | Unauthorized   | invalid username or password |
 | 500    | Internal Error | failed updating the record |
-| 200    | OK             | success |
+| 200    | OK             | - |
 
 #### /api/user/\<username\>
 
@@ -106,7 +106,7 @@ curl -s -L http://localhost:8000/api/user/patrick | jq '.'
 | Código | Status         | Message |
 |:------:|:--------------:|:--------|
 | 404    | Not Found      | user not found |
-| 200    | OK             | success |
+| 200    | OK             | - |
 
 ## TODO
 

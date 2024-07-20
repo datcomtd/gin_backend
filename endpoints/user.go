@@ -27,17 +27,16 @@ type public_User struct {
 }
 
 func GetUsers(c *gin.Context) {
-	var users []models.User
+	var users []public_User
 
 	// 1. get all user records
-	initializers.DB.Find(&users)
+	initializers.DB.Model(&models.User{}).Find(&users)
 
 	c.JSON(http.StatusOK, gin.H{"user": users})
 }
 
 func GetUserByUsername(c *gin.Context) {
-	var public_user public_User
-	var user models.User
+	var user public_User
 
 	// 1. get the user record
 	// 1.1. set the primaryKey to null
@@ -49,13 +48,5 @@ func GetUserByUsername(c *gin.Context) {
 		return
 	}
 
-	//  2. make the public_user record of the user
-	public_user = public_User{
-		Username: user.Username,
-		Email:    user.Email,
-		Role:     user.Role,
-		Course:   user.Course,
-	}
-
-	c.JSON(http.StatusOK, gin.H{"user": public_user})
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

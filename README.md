@@ -31,6 +31,21 @@ O servidor estará esperando por conexões em 127.0.0.1:8000.
 
 Registra um novo usuário no banco de dados.
 
+| Enum | Role/Função |
+|:----:|:-----|
+| 1    | Presidente |
+| 2    | Vice de Computação |
+| 3    | Vice de TSI |
+| 4    | Secretário(a) |
+| 5    | Tesoureiro(a) |
+| 6    | Diretor(a) |
+| ≥ 7  | Outros |
+
+| Enum | Curso |
+|:----:|:------|
+| 1    | Computação |
+| 2    | TSI |
+
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
   -d "{\"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}" \
@@ -57,6 +72,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 |:------:|:--------------:|:--------|
 | 400    | Bad Request    | required fields are not filled |
 | 400    | Bad Request    | user is already registered |
+| 400    | Bad Request    | invalid course |
 | 500    | Internal Error | failed hashing the password |
 | 500    | Internal Error | failed creating the record |
 | 201    | Created        | - |

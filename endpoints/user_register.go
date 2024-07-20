@@ -17,9 +17,10 @@ import (
 // Register (POST registerRequest)
 //  0. retrieve post data
 //  1. check if the required fields are filled
-//  2. check if the user is already registered
-//  3. hash the body password
-//  4. create a record in the database
+//  2. check if the course value is valid
+//  3. check if the user is already registered
+//  4. hash the body password
+//  5. create a record in the database
 //
 
 type registerRequest struct {
@@ -47,22 +48,28 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 2. check if the user is already registered
+	// 2. check if the course value is valid
+	if body.Course > 2 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid course"})
+		return
+	}
+
+	// 3. check if the user is already registered
 	result := initializers.DB.Where("username = ?", strings.ToLower(body.Username)).First(&user)
 	if result.Error == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "user is already registered"})
 		return
 	}
 
-	// 3. hash the body password
+	// 4. hash the body password
 	hashedPassword, err := authentication.HashPassword(body.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed hashing the password"})
 		return
 	}
 
-	// 4. create the record in the database
-	// 4.1. create the model for insertion
+	// 5. create the record in the database
+	// 5.1. create the model for insertion
 	user = models.User{
 		Token_UpdatedAt: time.Now().UTC(),
 		Token:           utils.RandomString(64),
@@ -74,7 +81,7 @@ func Register(c *gin.Context) {
 		Role:   body.Role,
 		Course: body.Course,
 	}
-	// 4.2. insert the model into the database
+	// 5.2. insert the model into the database
 	result = initializers.DB.Create(&user)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed creating the record"})

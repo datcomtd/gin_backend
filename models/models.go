@@ -4,15 +4,36 @@ import (
 	"time"
 )
 
-type Document struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
+const (
+	President uint = 1
+	Vice_CC        = 2
+	Vice_TSI       = 3
+	Secretary      = 4
+	Treasurer      = 5
+	Director       = 6
+)
+
+const (
+	COMP = 1
+	TSI  = 2
+)
+
+type Token struct {
 	UpdatedAt time.Time
+	String    string
+}
 
-	Title       string `json:"title"`
-	File        string `json:"file"` // file path
-	Description string `json:"description"`
+type User struct {
+	CreatedAt time.Time
+	UpdateAt  time.Time
 
-	Category string `json:"category"`
-	Active   bool   `json:"active"`
+	Token_UpdatedAt time.Time
+	Token           string
+	Password        string
+
+	Username string `json:"name" gorm:"primaryKey;unique"`
+	Email    string `json:"email"`
+
+	Role   uint `json:"role"`
+	Course uint `json:"course"`
 }

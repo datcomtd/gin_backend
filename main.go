@@ -19,9 +19,13 @@ func main() {
 	// default permite todas as origens
 	router.Use(utils.CORSMiddleware())
 
-	// Editais endpoints
-	router.GET("/api/editais/", endpoints.GetEditais)
-	router.POST("/api/editais/add", endpoints.AddEdital)
+	// Authentication endpoints
+	router.POST("/api/register", endpoints.Register)
+	router.POST("/api/token", endpoints.GetToken)
+
+	// Members endpoints
+	router.GET("/api/users", endpoints.GetUsers)
+	router.GET("/api/user/:username", endpoints.GetUserByUsername)
 
 	router.Run("localhost:8000")
 }

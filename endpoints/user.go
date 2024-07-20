@@ -15,7 +15,16 @@ import (
 //
 // GetUserByUsername (GET :username)
 //  1. get the user record
+//  2. make the public_user record of the user
 //
+
+type public_User struct {
+	Username string `json:"name"`
+	Email    string `json:"email"`
+
+	Role   uint `json:"role"`
+	Course uint `json:"course"`
+}
 
 func GetUsers(c *gin.Context) {
 	var users []models.User
@@ -27,6 +36,7 @@ func GetUsers(c *gin.Context) {
 }
 
 func GetUserByUsername(c *gin.Context) {
+	var public_user public_User
 	var user models.User
 
 	// 1. get the user record
@@ -39,5 +49,13 @@ func GetUserByUsername(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	//  2. make the public_user record of the user
+	public_user = public_User{
+		Username: user.Username,
+		Email:    user.Email,
+		Role:     user.Role,
+		Course:   user.Course,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": public_user})
 }

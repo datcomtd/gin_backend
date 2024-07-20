@@ -17,6 +17,11 @@ function list_users() {
   echo
 }
 
+function list_user() {
+  curl -s -L http://localhost:8000/api/user/${*} | jq '.'
+  echo
+}
+
 function get_token() {
   curl -s -L \
     -X POST -H "Content-Type: application/json" \

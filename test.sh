@@ -8,6 +8,9 @@ source test_cases/load.sh
 Print "add the computer engineer president"
 add_user "{\"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}"
 
+Print "list user: patrick"
+list_user "patrick"
+
 Print "list all users"
 list_users
 

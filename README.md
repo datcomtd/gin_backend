@@ -1,5 +1,19 @@
 # DATCOM-TD backend
 
+<img align="right" width="128px" src=".media/coffee.png">
+
+Esse repositório contém uma implementação de uma REST API para o backend do site do DATCOM-TD. Foi escrito em [Go](https://go.dev/) utilizando o framework [Gin](https://github.com/gin-gonic/gin/).
+
+As rotas (endpoints) implementadas estão listadas na tabela abaixo:
+
+| Endpoint                      | Request | Token | Auth |
+|:------------------------------|:-------:|:-----:|:----:|
+| /api/register                 | POST    | x     | x |
+| /api/token                    | POST    | x     | o |
+| /api/users                    | GET     | x     | x |
+| /api/user/\<username\>        | GET     | x     | x |
+| /api/user/\<username\>/update | POST    | x     | o |
+
 ## Instruções
 
 Instale as dependências e use o migrate.go:

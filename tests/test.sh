@@ -12,7 +12,8 @@ Print "list user: patrick"
 list_user "patrick"
 
 Print "get patrick's token"
-get_token "{\"username\": \"patrick\", \"password\": \"patrick123\"}"
+token=$(get_token "{\"username\": \"patrick\", \"password\": \"patrick123\"}")
+echo "Token: ${token}"
 
 Print "update patrick record"
 update_user "patrick" "{\"username\": \"patrick\", \"password\": \"patrick123\", \"email\": \"newemail@gmail.com\"}"
@@ -20,11 +21,13 @@ update_user "patrick" "{\"username\": \"patrick\", \"password\": \"patrick123\",
 Print "list user: patrick"
 list_user "patrick"
 
-Print "add user: alexandre"
-add_user "{\"username\": \"alexandre\", \"password\": \"alexandre123\", \"role\": 2, \"course\": 1}"
+Print "generate a key for document upload"
+#generate_document_key_error "${token}" "{\"title\": \"Simple Text File\", \"source\": \"Tester\", \"category\": \"edital\"}"
+key=$(generate_document_key "${token}" "{\"title\": \"Simple Text File\", \"source\": \"Tester\", \"category\": \"edital\"}")
+echo "Key: ${key}"
 
-Print "delete user: patrick"
-delete_user "patrick" "patrick123"
+Print "uploading the document text.txt"
+upload_document "${key}" "${token}" "text.txt"
 
-Print "list all users"
-list_users
+Print "list all documents"
+list_documents

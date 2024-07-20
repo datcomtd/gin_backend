@@ -14,6 +14,10 @@ As rotas (endpoints) implementadas estão listadas na tabela abaixo:
 | /api/user/\<username\>  | GET     | x     | x |
 | /api/user/update        | POST    | x     | o |
 | /api/user/delete        | POST    | x     | o |
+| /api/documents                         | GET     | x     | x |
+| /api/document/by-id/\<id\>             | GET     | x     | x |
+| /api/document/by-category/\<category\> | GET     | x     | x |
+| /api/document/upload/{\<key\>}         | POST    | o     | x |
 
 ## Instruções
 
@@ -198,6 +202,155 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 401    | Unauthorized   | invalid username or password |
 | 500    | Internal Error | failed deleting the record |
 | 200    | OK             | deleted successfully |
+
+### DOCUMENT endpoints
+
+#### /api/documents
+
+Obtém a lista de todos os documentos.
+
+```bash
+$ curl -s -L http://localhost:8000/api/documents | jq '.'
+```
+
+```json
+{
+  "document": [
+    {
+      "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
+      "UpdateAt": "0001-01-01T00:00:00Z",
+      "id": 1,
+      "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
+      "title": "Simple Text File",
+      "description": "",
+      "source": "Tester",
+      "category": "edital",
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+  ]
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 200    | OK             | -       |
+
+#### /api/document/by-id/\<id\>
+
+Obtém as informações de um documento.
+
+```bash
+$ curl -s -L http://localhost:8000/api/document/by-id/nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM | jq '.'
+```
+
+```json
+{
+  "document": {
+      "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
+      "UpdateAt": "0001-01-01T00:00:00Z",
+      "id": 1,
+      "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
+      "title": "Simple Text File",
+      "description": "",
+      "source": "Tester",
+      "category": "edital",
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 404    | Not Found      | document not found |
+| 200    | OK             | - |
+
+#### /api/document/by-category/\<category\>
+
+Obtém uma lista de documentos de uma categoria.
+
+```bash
+$ curl -s -L http://localhost:8000/api/document/by-category/edital | jq '.'
+```
+
+```json
+{
+  "document": {
+      "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
+      "UpdateAt": "0001-01-01T00:00:00Z",
+      "id": 1,
+      "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
+      "title": "Simple Text File",
+      "description": "",
+      "source": "Tester",
+      "category": "edital",
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 200    | OK             | -       |
+
+#### /api/document/upload e /api/document/upload/\<key\>
+
+Faz upload de algum documento.  
+O upload é feito em duas etapas:
+1. Envio de metadados do arquivo (titulo, descrição, orgão e categoria) por um post request. Será gerado uma chave key.
+2. Envio do arquivo para /api/document/upload/\<key\>.
+
+```bash
+# Envio de metadados e geração da chave key
+$ curl -s -L -X POST \
+  -H "Authorization: \<token\>" \
+  -H "Content-Type: application/json" \
+  -d "{\"title\": \"O Senhor dos Anéis\", \"source\": \"J. R. R. Tolkien\", \"category\": \"fictional book\"}" \
+  http://localhost:8000/api/document/upload | jq '.'
+
+$ curl -s -L -X POST \
+  -H "Authorization: \<token\>" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@senhor_dos_aneis.pdf" \
+  http://localhost:8000/api/document/upload/\<key\> | jq '.'
+```
+
+```json
+{
+  "key": "kGVnythePZEOGjKHRIVdkzimYIWFHHQC"
+}
+```
+
+```json
+{
+  "document": {
+    "CreatedAt": "2024-07-20T12:11:28.770287042-03:00",
+    "UpdateAt": "0001-01-01T00:00:00Z",
+    "id": 1,
+    "Key": "kGVnythePZEOGjKHRIVdkzimYIWFHHQC",
+    "title": "O Senhor dos Anéis",
+    "description": "",
+    "source": "J. R. R. Tolkien",
+    "category": "fictional book",
+    "created-by": "patrick",
+    "last-updated-by": "patrick"
+  }
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 400    | Bad Request    | file already exists |
+| 400    | Bad Request    | invalid document |
+| 401    | Unauthorized   | invalid token |
+| 401    | Unauthorized   | invalid key |
+| 500    | Internal Error | failed creating the record |
+| 500    | Internal Error | failed saving the document |
+| 200    | OK             | (for the key step) |
+| 201    | Created        | (document uploaded) |
 
 ## TODO
 

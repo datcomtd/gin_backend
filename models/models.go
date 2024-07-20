@@ -37,3 +37,20 @@ type User struct {
 	Role   uint `json:"role"`
 	Course uint `json:"course"`
 }
+
+type Document struct {
+	CreatedAt time.Time
+	UpdateAt  time.Time
+
+	ID  uint `json:"id" gorm:"primaryKey"`
+	Key string
+
+	Title       string `json:"title"`
+	Description string `json:"description"`
+
+	Source   string `json:"source"`
+	Category string `json:"category"`
+
+	CreatedBy     string `json:"created-by"`
+	LastUpdatedBy string `json:"last-updated-by"`
+}

@@ -23,11 +23,18 @@ func main() {
 	router.POST("/api/register", endpoints.Register)
 	router.POST("/api/token", endpoints.GetToken)
 
-	// Members endpoints
+	// User endpoints
 	router.GET("/api/users", endpoints.GetUsers)
 	router.GET("/api/user/:username", endpoints.GetUserByUsername)
 	router.POST("/api/user/update", endpoints.UpdateUser)
 	router.POST("/api/user/delete", endpoints.DeleteUser)
+
+	// Document endpoints
+	router.GET("/api/documents", endpoints.GetDocuments)
+	router.GET("/api/document/by-id/:id", endpoints.GetDocumentByID)
+	router.GET("/api/document/by-category/:category", endpoints.GetDocumentsByCategory)
+	router.POST("/api/document/upload", endpoints.GenerateKey)
+	router.POST("/api/document/upload/:key", endpoints.UploadDocument)
 
 	router.Run("localhost:8000")
 }

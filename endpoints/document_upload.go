@@ -34,6 +34,7 @@ import (
 type uploadRequest struct {
 	Body string
 
+	Filename    string `json:"filename"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 
@@ -78,6 +79,7 @@ func GenerateKey(c *gin.Context) {
 	// 5.1. new document model
 	document = models.Document{
 		Key:           utils.RandomString(32),
+		Filename:      body.Filename,
 		Title:         body.Title,
 		Description:   body.Description,
 		Source:        body.Source,
@@ -140,7 +142,18 @@ func UploadDocument(c *gin.Context) {
 	}
 
 	// 7. save the file
-	err = c.SaveUploadedFile(file, "./media/"+document.Key)
+	// 7.1. if the filename is empty, use the formfile filename metadata
+	if document.Filename == "" {
+		document.Filename = file.Filename
+		// 7-A.2. update the document record in the database
+		result = initializers.DB.Model(&document).Updates(document)
+		if result.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed updating the record"})
+			return
+		}
+	}
+	// 7.2. save the file to disk
+	err = c.SaveUploadedFile(file, "./media/"+document.Key+"_"+document.Filename)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed saving the document"})
 		return

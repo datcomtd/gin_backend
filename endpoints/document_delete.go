@@ -62,7 +62,7 @@ func DeleteDocument(c *gin.Context) {
 	}
 
 	// 5. delete the document file
-	err := os.Remove("./media/" + document.Key)
+	err := os.Remove("./media/" + document.Key + "_" + document.Filename)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed deleting the document"})
 		return

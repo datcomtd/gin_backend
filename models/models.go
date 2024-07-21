@@ -45,6 +45,7 @@ type Document struct {
 	ID  uint `json:"id" gorm:"primaryKey"`
 	Key string
 
+	Filename    string
 	Title       string `json:"title"`
 	Description string `json:"description"`
 

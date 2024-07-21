@@ -31,7 +31,7 @@ import (
 //  7. save the file
 //
 
-type uploadRequest struct {
+type document_uploadRequest struct {
 	Body string
 
 	Filename    string `json:"filename"`
@@ -43,7 +43,7 @@ type uploadRequest struct {
 }
 
 func GenerateKey(c *gin.Context) {
-	var body uploadRequest
+	var body document_uploadRequest
 	var document models.Document
 
 	// 0. retrieve post data

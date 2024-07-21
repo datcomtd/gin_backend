@@ -21,7 +21,7 @@ import (
 //  5. update the user record in the database
 //
 
-type updateRequest struct {
+type user_updateRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 
@@ -33,7 +33,7 @@ type updateRequest struct {
 }
 
 func UpdateUser(c *gin.Context) {
-	var body updateRequest
+	var body user_updateRequest
 	var user models.User
 
 	//  0. retrieve post data

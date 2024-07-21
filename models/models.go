@@ -18,11 +18,6 @@ const (
 	TSI  = 2
 )
 
-type Token struct {
-	UpdatedAt time.Time
-	String    string
-}
-
 type User struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time

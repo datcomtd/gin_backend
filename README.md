@@ -8,11 +8,11 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 16       | 910    | 176    | 165 |
-| Bash      | 3        | 146    | 18     | 5 |
-| Markdown  | 1        | 410    | 78     | 0 |
+| Go        | 17       | 1021   | 192    | 190 |
+| Bash      | 3        | 160    | 20     | 5 |
+| Markdown  | 1        | 453    | 83     | 0 |
 | Text      | 1        | 1      | 0      | 0 |
-| **Total** | **21** | **1467** | **272** | **170** |
+| **Total** | **22** | **1635** | **295** | **195** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -31,6 +31,7 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | /api/document/by-id/\<id\>             | GET     | x     | x |
 | /api/document/by-category/\<category\> | GET     | x     | x |
 | /api/document/upload/{\<key\>}         | POST    | o     | x |
+| /api/document/update                   | POST    | o     | x |
 | /api/document/delete                   | POST    | o     | x |
 
 ## Instruções
@@ -377,9 +378,51 @@ kGVnythePZEOGjKHRIVdkzimYIWFHHQC_senhor_dos_aneis.pdf
 | 200    | OK             | (for the key step) |
 | 201    | Created        | (document uploaded) |
 
+#### /api/document/update
+
+Atualiza os metadados de um documento.  
+Para modificar o documento em si, remova ele e faça upload de um novo documento. O motivo pelo qual optei por não implementar um update do documento em si pode ser encontrado [aqui](https://philsturgeon.com/http-rest-api-file-uploads/).
+
+```bash
+$ curl -s -L -X POST \
+    -H "Authorization: \<token\>" \
+    -H "Content-Type: application/json" \
+    -d "{\"id\": 1, \"filename\": \"novo_nome.pdf\"}" \
+    http://localhost:8000/api/document/update | jq '.'
+```
+
+```json
+{
+  "document": {
+    "CreatedAt": "2024-07-20T12:11:28.770287042-03:00",
+    "UpdateAt": "0001-01-01T00:00:00Z",
+    "id": 1,
+    "Key": "kGVnythePZEOGjKHRIVdkzimYIWFHHQC",
+    "filename": "novo_nome.pdf",
+    "title": "O Senhor dos Anéis",
+    "description": "",
+    "source": "J. R. R. Tolkien",
+    "category": "fictional book",
+    "created-by": "patrick",
+    "last-updated-by": "patrick"
+  }
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 401    | Unauthorized   | invalid token |
+| 403    | Forbidden      | user does not have permission |
+| 404    | Not Found      | document not found |
+| 500    | Internal Error | failed renaming the file |
+| 500    | Internal Error | failed updating the record |
+| 200    | OK             | - |
+
 #### /api/document/delete
 
-Deleta um documento.
+Deleta um documento.  
+Somente o criador (que fez upload) daquele documento que tem permissão para removê-lo.
 
 ```bash
 $ curl -s -L -X POST \

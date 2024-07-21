@@ -103,3 +103,14 @@ function delete_document() {
     http://localhost:8000/api/document/delete | jq '.'
   echo
 }
+
+function update_document() {
+  token="${1}"
+  shift
+
+  curl -s -L -X POST -H "Content-Type: application/json" \
+    -H "Authorization: ${token}" \
+    -d "${*}" \
+    http://localhost:8000/api/document/update | jq '.'
+  echo
+}

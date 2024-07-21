@@ -23,7 +23,7 @@ import (
 //  5. create a record in the database
 //
 
-type registerRequest struct {
+type user_registerRequest struct {
 	Body string
 
 	Password string `json:"password"`
@@ -36,7 +36,7 @@ type registerRequest struct {
 }
 
 func Register(c *gin.Context) {
-	var body registerRequest
+	var body user_registerRequest
 	var user models.User
 
 	// 0. retrieve post data

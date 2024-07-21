@@ -29,6 +29,9 @@ echo "Key: ${key}"
 Print "uploading the document text.txt"
 upload_document "${key}" "${token}" "text.txt"
 
+Print "renaming the document"
+update_document "${token}" "{\"id\": 1, \"filename\": \"newfilename.txt\"}"
+
 Print "list all documents"
 list_documents
 

@@ -20,7 +20,7 @@ import (
 //  4. delete the user record
 //
 
-type deleteRequest struct {
+type user_deleteRequest struct {
 	Body string
 
 	Username string `json:"username"`
@@ -28,7 +28,7 @@ type deleteRequest struct {
 }
 
 func DeleteUser(c *gin.Context) {
-	var body deleteRequest
+	var body user_deleteRequest
 	var user models.User
 
 	// 0. retrieve post data

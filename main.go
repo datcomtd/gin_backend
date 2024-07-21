@@ -36,6 +36,7 @@ func main() {
 	router.POST("/api/document/upload", endpoints.GenerateKey)
 	router.POST("/api/document/upload/:key", endpoints.UploadDocument)
 	router.POST("/api/document/delete", endpoints.DeleteDocument)
+	router.POST("/api/document/update", endpoints.UpdateDocument)
 
 	router.Run("localhost:8000")
 }

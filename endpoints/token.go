@@ -59,7 +59,7 @@ func GetToken(c *gin.Context) {
 	}
 
 	// 4. check if the user's token is expired, if so, generate a new one
-	if time.Now().UTC().Sub(user.Token_UpdatedAt).Hours() > 168 {
+	if time.Now().UTC().Sub(user.Token_UpdatedAt).Hours() > initializers.TOKEN_EXPIRES_HOURS {
 		// 4-A.1. generate a new token
 		user.Token_UpdatedAt = time.Now().UTC()
 		user.Token = utils.RandomString(64)

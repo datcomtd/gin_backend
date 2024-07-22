@@ -55,7 +55,7 @@ func UpdateDocument(c *gin.Context) {
 	}
 
 	// 3. check if the user has permission
-	if userrole > 6 {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}

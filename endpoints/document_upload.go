@@ -63,7 +63,7 @@ func GenerateKey(c *gin.Context) {
 	}
 
 	// 3. check if the user has permission to upload a document
-	if userrole > 6 {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}
@@ -109,7 +109,7 @@ func UploadDocument(c *gin.Context) {
 	}
 
 	// 2. check if the user has permission to upload a document
-	if userrole > 6 {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}

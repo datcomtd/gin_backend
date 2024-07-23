@@ -42,11 +42,14 @@ func GetToken(c *gin.Context) {
 	}
 
 	// 2. check if the user exists
-	// 2.1. set the primaryKey to null
-	user.Username = ""
-	// 2.2. sql query
+	// 2.1. sql query
 	result := initializers.DB.Model(&models.User{}).Where("username = ?", body.Username).First(&user)
 	if result.Error != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+		return
+	}
+	// 2.2. check if the username is valid
+	if body.Username != user.Username {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
 		return
 	}

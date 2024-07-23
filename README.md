@@ -8,11 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 18       | 1023   | 193    | 192 |
+| Go        | 18       | 1035   | 193    | 193 |
 | Bash      | 3        | 160    | 20     | 5 |
 | Markdown  | 1        | 453    | 83     | 0 |
-| Text      | 1        | 1      | 0      | 0 |
-| **Total** | **23** | **1637** | **296** | **197** |
+| **Total** | **22** | **1648** | **296** | **198** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 

@@ -51,6 +51,11 @@ func UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
 		return
 	}
+	// 2.B. reinforce username checking
+	if body.Username != user.Username {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+		return
+	}
 
 	// 3. check if the password is correct
 	bl := authentication.VerifyPassword(body.Password, user.Password)

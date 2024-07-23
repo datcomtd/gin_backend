@@ -39,11 +39,15 @@ func GetUserByUsername(c *gin.Context) {
 	var user public_User
 
 	// 1. get the user record
-	// 1.1. set the primaryKey to null
-	user.Username = ""
-	// 1.2. sql query
-	result := initializers.DB.Model(&models.User{}).Where("username = ?", c.Param("username")).First(&user)
+	username := c.Param("username")
+	// 1.1. sql query
+	result := initializers.DB.Model(&models.User{}).Where("username = ?", username).First(&user)
 	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
+		return
+	}
+	// 1.2. check if the username is valid
+	if username != user.Username {
 		c.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
 		return
 	}

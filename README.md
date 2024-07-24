@@ -10,28 +10,28 @@ Estatisticas:
 |:---------:|:--------:|:------:|:------:|:-----------:|
 | Go        | 18       | 1035   | 193    | 193 |
 | Bash      | 3        | 160    | 20     | 5 |
-| Markdown  | 1        | 453    | 83     | 0 |
-| **Total** | **22** | **1648** | **296** | **198** |
+| Markdown  | 1        | 474    | 83     | 0 |
+| **Total** | **22** | **1669** | **296** | **198** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
-| USER Endpoint           | Request | Token | Auth |
-|:------------------------|:-------:|:-----:|:----:|
-| /api/register           | POST    | x     | x |
-| /api/token              | POST    | x     | o |
-| /api/users              | GET     | x     | x |
-| /api/user/\<username\>  | GET     | x     | x |
-| /api/user/update        | POST    | x     | o |
-| /api/user/delete        | POST    | x     | o |
+| USER Endpoint                        | Request | Token | Auth |
+|:-------------------------------------|:-------:|:-----:|:----:|
+| [/api/register](#register)           | POST    | x     | x |
+| [/api/token](#token)                 | POST    | x     | o |
+| /api/users                           | GET     | x     | x |
+| [/api/user/\<username\>](#user-read) | GET     | x     | x |
+| [/api/user/update](#user-update)     | POST    | x     | o |
+| [/api/user/delete](#user-delete)     | POST    | x     | o |
 
 | DOCUMENT Endpoint                      | Request | Token | Auth |
 |:---------------------------------------|:-------:|:-----:|:----:|
-| /api/documents                         | GET     | x     | x |
-| /api/document/by-id/\<id\>             | GET     | x     | x |
-| /api/document/by-category/\<category\> | GET     | x     | x |
-| /api/document/upload/{\<key\>}         | POST    | o     | x |
-| /api/document/update                   | POST    | o     | x |
-| /api/document/delete                   | POST    | o     | x |
+| [/api/documents](#doc-read-all)                              | GET     | x     | x |
+| [/api/document/by-id/\<id\>](#doc-read-id)                   | GET     | x     | x |
+| [/api/document/by-category/\<category\>](#doc-read-category) | GET     | x     | x |
+| [/api/document/upload/{\<key\>}](#doc-upload)                | POST    | o     | x |
+| [/api/document/update](#doc-update)                          | POST    | o     | x |
+| [/api/document/delete](#doc-delete)                          | POST    | o     | x |
 
 ## Instruções
 
@@ -60,7 +60,9 @@ O servidor estará esperando por conexões em 127.0.0.1:8000.
 
 ### USER endpoints
 
-#### /api/register
+<h4 id="register">
+:book:&nbsp;&nbsp;/api/register
+</h4>
 
 Registra um novo usuário no banco de dados.
 
@@ -110,7 +112,9 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 500    | Internal Error | failed creating the record |
 | 201    | Created        | - |
 
-#### /api/token
+<h4 id="token">
+:book:&nbsp;&nbsp;/api/token
+</h4>
 
 Obtém o token de autentificação de um usuário.
 
@@ -133,7 +137,9 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 500    | Internal Error | failed updating the record |
 | 200    | OK             | - |
 
-#### /api/user/\<username\>
+<h4 id="user-read">
+:book:&nbsp;&nbsp;/api/user/&lt;username&gt;
+</h4>
 
 Obtém as informações públicas de algum usuário.
 
@@ -157,7 +163,9 @@ $ curl -s -L http://localhost:8000/api/user/patrick | jq '.'
 | 404    | Not Found      | user not found |
 | 200    | OK             | - |
 
-#### /api/user/update
+<h4 id="user-update">
+:book:&nbsp;&nbsp;/api/user/update
+</h4>
 
 Atualiza as informações de um usuário.  
 Use newpassword para atualizar a senha ao invés de password, que foi reservado para a autentificação por post request.
@@ -193,7 +201,9 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 500    | Internal Error | failed updating the record |
 | 200    | OK             | - |
 
-#### /api/user/delete
+<h4 id="user-delete">
+:book:&nbsp;&nbsp;/api/user/delete
+</h4>
 
 Deleta algum usuário do banco de dados.  
 Não foi implementado nenhum tipo de soft delete, então a remoção é permanente.
@@ -219,7 +229,9 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 
 ### DOCUMENT endpoints
 
-#### /api/documents
+<h4 id="doc-read-all">
+:book:&nbsp;&nbsp;/api/documents
+</h4>
 
 Obtém a lista de todos os documentos.
 
@@ -250,7 +262,9 @@ $ curl -s -L http://localhost:8000/api/documents | jq '.'
 |:------:|:--------------:|:--------|
 | 200    | OK             | -       |
 
-#### /api/document/by-id/\<id\>
+<h4 id="doc-read-id">
+:book:&nbsp;&nbsp;/api/document/by-id/&lt;id&gt;
+</h4>
 
 Obtém as informações de um documento.
 
@@ -280,7 +294,9 @@ $ curl -s -L http://localhost:8000/api/document/by-id/1 | jq '.'
 | 404    | Not Found      | document not found |
 | 200    | OK             | - |
 
-#### /api/document/by-category/\<category\>
+<h4 id="doc-read-category">
+:book:&nbsp;&nbsp;/api/document/by-category/&lt;category&gt;
+</h4>
 
 Obtém uma lista de documentos de uma categoria.
 
@@ -309,7 +325,9 @@ $ curl -s -L http://localhost:8000/api/document/by-category/edital | jq '.'
 |:------:|:--------------:|:--------|
 | 200    | OK             | -       |
 
-#### /api/document/upload e /api/document/upload/\<key\>
+<h4 id="doc-upload">
+:book:&nbsp;&nbsp;/api/document/upload e /api/document/upload/&lt;key&gt;
+</h4>
 
 Faz upload de algum documento.
 
@@ -377,7 +395,9 @@ kGVnythePZEOGjKHRIVdkzimYIWFHHQC_senhor_dos_aneis.pdf
 | 200    | OK             | (for the key step) |
 | 201    | Created        | (document uploaded) |
 
-#### /api/document/update
+<h4 id="doc-update">
+:book:&nbsp;&nbsp;/api/document/update
+</h4>
 
 Atualiza os metadados de um documento.  
 Para modificar o documento em si, remova ele e faça upload de um novo documento. O motivo pelo qual optei por não implementar um update do documento em si pode ser encontrado [aqui](https://philsturgeon.com/http-rest-api-file-uploads/).
@@ -418,7 +438,9 @@ $ curl -s -L -X POST \
 | 500    | Internal Error | failed updating the record |
 | 200    | OK             | - |
 
-#### /api/document/delete
+<h4 id="doc-delete">
+:book:&nbsp;&nbsp;/api/document/delete
+</h4>
 
 Deleta um documento.  
 Somente o criador (que fez upload) daquele documento que tem permissão para removê-lo.

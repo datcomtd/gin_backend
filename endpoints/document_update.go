@@ -93,7 +93,7 @@ func UpdateDocument(c *gin.Context) {
 		document.Source = body.Source
 	}
 	// 5.5. category
-	if (body.Title != "") && (body.Title != document.Title) {
+	if (body.Category != "") && (body.Category != document.Category) {
 		document.Category = body.Category
 	}
 

@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 18       | 1035   | 193    | 193 |
-| Bash      | 3        | 160    | 20     | 5 |
-| Markdown  | 1        | 474    | 83     | 0 |
-| **Total** | **22** | **1669** | **296** | **198** |
+| Go        | 18       | 1045   | 195    | 194 |
+| Bash      | 3        | 197    | 28     | 5 |
+| Markdown  | 1        | 550    | 97     | 0 |
+| **Total** | **22** | **1792** | **320** | **199** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -35,20 +35,46 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
 ## Instruções
 
-Instale as dependências e use o migrate.go:
+Instale as dependências:
 
 ```bash
 $ go get .
-$ go run migrate/migrate.go
 ```
 
-Para resetar o banco de dados:
+OPCIONAL: Para poder utilizar sua conta GMail com SMTP no backend, crie uma "senha de app" seguindo [esse passo-a-passo](https://canaltech.com.br/internet/como-usar-o-gmail-como-servidor-smtp/). Depois, modifique o env de acordo:
+
+```bash
+# OPCIONAL
+$ vim initializers/env.go
+var SenderEmail string = "alexandreboutrik@alunos.utfpr.edu.br"
+var SenderPassword string = "<your app password>"
+```
+
+Configure o PostgreSQL:
+
+```bash
+$ sudo vim /etc/postgresql-16/postgresql.conf # ou equivalente
+listen_addresses = 'localhost'
+port = 4145
+
+$ sudo vim /etc/postgresql-16/pg_hba.conf # caso exista esse arquivo
+local all postgres trust
+local all all md5
+```
+
+Inicie o servidor do postgres:
+
+```bash
+$ sudo systemctl start postgresql
+```
+
+Para resetar, criar um novo banco de dados:
 
 ```bash
 $ ./reset.sh
 ```
 
-Inicie o servidor:
+Para iniciar o backend do DATCOM-TD:
 
 ```bash
 $ go run .
@@ -56,7 +82,7 @@ $ go run .
 
 O servidor estará esperando por conexões em 127.0.0.1:8000.
 
-## REST API
+## Documentação da REST API
 
 ### USER endpoints
 
@@ -80,6 +106,14 @@ Registra um novo usuário no banco de dados.
 |:----:|:------|
 | 1    | Computação |
 | 2    | TSI |
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| username | string | yes |
+| email    | string | no  |
+| password | string | yes |
+| role     | enum   | yes |
+| course   | enum   | yes |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
@@ -117,6 +151,11 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 </h4>
 
 Obtém o token de autentificação de um usuário.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| username | string | yes |
+| password | string | yes |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
@@ -170,6 +209,15 @@ $ curl -s -L http://localhost:8000/api/user/patrick | jq '.'
 Atualiza as informações de um usuário.  
 Use newpassword para atualizar a senha ao invés de password, que foi reservado para a autentificação por post request.
 
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| username | string | yes |
+| password | string | yes |
+| newpassword | string | no |
+| email  | string | no |
+| role   | enum   | no |
+| course | enum   | no |
+
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
   -d "{\"username\": \"patrick\", \"password\": \"patrick123\", \"email\": \"newemail@gmail.com\"}" \
@@ -207,6 +255,11 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 
 Deleta algum usuário do banco de dados.  
 Não foi implementado nenhum tipo de soft delete, então a remoção é permanente.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| username | string | yes |
+| password | string | yes |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
@@ -337,6 +390,14 @@ O upload é feito em duas etapas:
 
 Os documentos são salvos em ./media/\<key\>\_\<filename\>.
 
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| title       | string | yes |
+| source      | string | yes |
+| category    | string | yes |
+| filename    | string | no |
+| description | string | no |
+
 ```bash
 # Envio de metadados e geração da chave key
 $ curl -s -L -X POST \
@@ -402,6 +463,15 @@ kGVnythePZEOGjKHRIVdkzimYIWFHHQC_senhor_dos_aneis.pdf
 Atualiza os metadados de um documento.  
 Para modificar o documento em si, remova ele e faça upload de um novo documento. O motivo pelo qual optei por não implementar um update do documento em si pode ser encontrado [aqui](https://philsturgeon.com/http-rest-api-file-uploads/).
 
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| id          | integer | yes |
+| filename    | string  | no  |
+| title       | string  | no  |
+| description | string  | no  |
+| source      | string  | no  |
+| category    | string  | no  |
+
 ```bash
 $ curl -s -L -X POST \
     -H "Authorization: \<token\>" \
@@ -445,6 +515,10 @@ $ curl -s -L -X POST \
 Deleta um documento.  
 Somente o criador (que fez upload) daquele documento que tem permissão para removê-lo.
 
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| id    | integer | yes |
+
 ```bash
 $ curl -s -L -X POST \
     -H "Authorization: \<token\>" \
@@ -471,4 +545,6 @@ $ curl -s -L -X POST \
 
 ## TODO
 
-- [ ] Migrate the DB from SQLite to PostgreSQL (sync to async)
+- [x] Migrate the DB from SQLite to PostgreSQL (sync to async)
+- [ ] Implement STORE endpoints
+- [ ] Maybe require an email confirmation code to register an user?

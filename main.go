@@ -3,7 +3,10 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"datcomtd/backend/endpoints"
+	"datcomtd/backend/endpoints/document"
+	"datcomtd/backend/endpoints/token"
+	"datcomtd/backend/endpoints/user"
+
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/utils"
 )
@@ -20,23 +23,23 @@ func main() {
 	router.Use(utils.CORSMiddleware())
 
 	// Authentication endpoints
-	router.POST("/api/register", endpoints.Register)
-	router.POST("/api/token", endpoints.GetToken)
+	router.POST("/api/register", user.Register)
+	router.POST("/api/token", token.GetToken)
 
 	// User endpoints
-	router.GET("/api/users", endpoints.GetUsers)
-	router.GET("/api/user/:username", endpoints.GetUserByUsername)
-	router.POST("/api/user/update", endpoints.UpdateUser)
-	router.POST("/api/user/delete", endpoints.DeleteUser)
+	router.GET("/api/users", user.GetUsers)
+	router.GET("/api/user/:username", user.GetUserByUsername)
+	router.POST("/api/user/update", user.UpdateUser)
+	router.POST("/api/user/delete", user.DeleteUser)
 
 	// Document endpoints
-	router.GET("/api/documents", endpoints.GetDocuments)
-	router.GET("/api/document/by-id/:id", endpoints.GetDocumentByID)
-	router.GET("/api/document/by-category/:category", endpoints.GetDocumentsByCategory)
-	router.POST("/api/document/upload", endpoints.GenerateKey)
-	router.POST("/api/document/upload/:key", endpoints.UploadDocument)
-	router.POST("/api/document/delete", endpoints.DeleteDocument)
-	router.POST("/api/document/update", endpoints.UpdateDocument)
+	router.GET("/api/documents", document.GetDocuments)
+	router.GET("/api/document/by-id/:id", document.GetDocumentByID)
+	router.GET("/api/document/by-category/:category", document.GetDocumentsByCategory)
+	router.POST("/api/document/upload", document.GenerateKey)
+	router.POST("/api/document/upload/:key", document.UploadDocument)
+	router.POST("/api/document/delete", document.DeleteDocument)
+	router.POST("/api/document/update", document.UpdateDocument)
 
 	router.Run("localhost:8000")
 }

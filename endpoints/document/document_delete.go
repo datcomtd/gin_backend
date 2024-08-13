@@ -1,4 +1,4 @@
-package endpoints
+package document
 
 import (
 	"github.com/gin-gonic/gin"
@@ -17,13 +17,15 @@ import (
 //  1. check if the required fields are filled
 //  2. check if the token is valid
 //  3. get the document record
-//  4. check if the token's user is the document creator
+//  4. check if the token's user is the document creator or ADMIN-KEY
 //  5. delete the document file
 //  6. delete the document record
 //
 
 type document_deleteRequest struct {
 	Body string
+
+	AdminKey string `json:"admin-key"`
 
 	ID uint `json:"id"`
 }
@@ -55,8 +57,8 @@ func DeleteDocument(c *gin.Context) {
 		return
 	}
 
-	// 4. check if the token's user is the document creator
-	if username != document.CreatedBy {
+	// 4. check if the token's user is the document creator or ADMIN-KEY
+	if username != document.CreatedBy && body.AdminKey != initializers.DATCOM_ADMIN_KEY {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user is not the document's creator"})
 		return
 	}

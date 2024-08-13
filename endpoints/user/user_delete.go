@@ -1,4 +1,4 @@
-package endpoints
+package user
 
 import (
 	"github.com/gin-gonic/gin"
@@ -16,12 +16,14 @@ import (
 //  0. retrieve post data
 //  1. check if the required fields are filled
 //  2. check if the user exists
-//  3. check if the password is correct
+//  3. check if the password is correct or ADMIN-KEY
 //  4. delete the user record
 //
 
 type user_deleteRequest struct {
 	Body string
+
+	AdminKey string `json:"admin-key"`
 
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -47,9 +49,9 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	// 3. check if the password is correct
+	// 3. check if the password is correct or ADMIN-KEY
 	bl := authentication.VerifyPassword(body.Password, user.Password)
-	if bl != true {
+	if bl != true && body.AdminKey != initializers.DATCOM_ADMIN_KEY {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
 		return
 	}

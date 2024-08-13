@@ -1,4 +1,4 @@
-package endpoints
+package document
 
 import (
 	"github.com/gin-gonic/gin"
@@ -76,9 +76,15 @@ func GenerateKey(c *gin.Context) {
 	}
 
 	// 5. create a new document record in the database
+	// 5.0. generate a key
+	key, err := authentication.HashPassword(body.Filename + utils.RandomString(32))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed generating a key"})
+		return
+	}
 	// 5.1. new document model
 	document = models.Document{
-		Key:           utils.RandomString(32),
+		Key:           key[:initializers.SIZE_DOCUMENT_KEY],
 		Filename:      body.Filename,
 		Title:         body.Title,
 		Description:   body.Description,

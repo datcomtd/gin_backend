@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 18       | 1045   | 195    | 194 |
-| Bash      | 3        | 197    | 28     | 5 |
-| Markdown  | 1        | 550    | 97     | 0 |
-| **Total** | **22** | **1792** | **320** | **199** |
+| Go        | 18       | 1078   | 204    | 199 |
+| Bash      | 4        | 204    | 31     | 6 |
+| Markdown  | 1        | 561    | 99     | 0 |
+| **Total** | **23** | **1843** | **334** | **205** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -74,6 +74,12 @@ Para resetar, criar um novo banco de dados:
 $ ./reset.sh
 ```
 
+Para criar uma chave de administrador:
+
+```bash
+$ ./admin-key.sh
+```
+
 Para iniciar o backend do DATCOM-TD:
 
 ```bash
@@ -109,15 +115,16 @@ Registra um novo usuário no banco de dados.
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
-| username | string | yes |
-| email    | string | no  |
-| password | string | yes |
-| role     | enum   | yes |
-| course   | enum   | yes |
+| admin-key | string | yes |
+| username  | string | yes |
+| email     | string | no  |
+| password  | string | yes |
+| role      | enum   | yes |
+| course    | enum   | yes |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
-  -d "{\"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}" \
+  -d "{\"admin-key\": \"eb8fac70478d46e4c68c\", \"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}" \
   http://localhost:8000/api/register | jq '.'
 ```
 
@@ -142,6 +149,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 400    | Bad Request    | required fields are not filled |
 | 400    | Bad Request    | user is already registered |
 | 400    | Bad Request    | invalid course |
+| 401    | Unauthorized   | invalid admin-key |
 | 500    | Internal Error | failed hashing the password |
 | 500    | Internal Error | failed creating the record |
 | 201    | Created        | - |
@@ -211,6 +219,7 @@ Use newpassword para atualizar a senha ao invés de password, que foi reservado 
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
+| admin-key | string | no |
 | username | string | yes |
 | password | string | yes |
 | newpassword | string | no |
@@ -258,6 +267,7 @@ Não foi implementado nenhum tipo de soft delete, então a remoção é permanen
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
+| admin-key | string | no |
 | username | string | yes |
 | password | string | yes |
 
@@ -513,10 +523,11 @@ $ curl -s -L -X POST \
 </h4>
 
 Deleta um documento.  
-Somente o criador (que fez upload) daquele documento que tem permissão para removê-lo.
+Somente o criador (que fez upload) daquele documento tem permissão para removê-lo.
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
+| admin-key | string | no |
 | id    | integer | yes |
 
 ```bash
@@ -546,5 +557,5 @@ $ curl -s -L -X POST \
 ## TODO
 
 - [x] Migrate the DB from SQLite to PostgreSQL (sync to async)
+- [ ] Admin-key system
 - [ ] Implement STORE endpoints
-- [ ] Maybe require an email confirmation code to register an user?

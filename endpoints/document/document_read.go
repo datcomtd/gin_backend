@@ -1,4 +1,4 @@
-package endpoints
+package document
 
 import (
 	"github.com/gin-gonic/gin"

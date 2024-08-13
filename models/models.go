@@ -14,8 +14,8 @@ const (
 )
 
 const (
-	COMP = 1
-	TSI  = 2
+	COMP uint = 1
+	TSI       = 2
 )
 
 type User struct {

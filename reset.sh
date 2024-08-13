@@ -15,7 +15,7 @@ function Try() {
   fi
 }
 
-curl -s -L "http://localhost:9920"
+curl -s -L "http://localhost:4145"
 if [ $? -ne 52 ]; then
   echo -e "\e[31;1m[-] postgresql não iniciado\e[0m"
   exit

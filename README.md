@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 18       | 1164   | 211    | 206 |
+| Go        | 19       | 1218   | 222    | 217 |
 | Bash      | 3        | 200    | 28     | 5 |
-| Markdown  | 1        | 558    | 97     | 0 |
-| **Total** | **22** | **1922** | **336** | **211** |
+| Markdown  | 1        | 588    | 102    | 0 |
+| **Total** | **23** | **2006** | **352** | **222** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -23,6 +23,7 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | [/api/user/\<username\>](#user-read) | GET     | x     | x |
 | [/api/user/update](#user-update)     | POST    | x     | o |
 | [/api/user/delete](#user-delete)     | POST    | x     | o |
+| [/api/user/picture](#user-picture)   | POST    | o     | x |
 
 | DOCUMENT Endpoint                      | Request | Token | Auth |
 |:---------------------------------------|:-------:|:-----:|:----:|
@@ -287,6 +288,34 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 401    | Unauthorized   | invalid username or password |
 | 500    | Internal Error | failed deleting the record |
 | 200    | OK             | user deleted |
+
+<h4 id="user-picture">
+:book:&nbsp;&nbsp;/api/user/picture
+</h4>
+
+Upload a profile picture.
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@<filename>" \
+  http://localhost:8000/api/user/picture | jq '.'
+```
+
+```json
+{
+  "message": "picture uploaded"
+}
+```
+
+| Code | Status          | Message |
+|:----:|:---------------:|:--------|
+| 400  | Bad Request     | invalid file |
+| 400  | Bad Request     | invalid extension |
+| 401  | Unauthorized    | invalid token |
+| 500  | Internal Error  | failed uploading the file |
+| 201  | Created         | - |
 
 ### DOCUMENT endpoints
 

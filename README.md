@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas   | Blanks  | Comentários |
 |:---------:|:--------:|:--------:|:-------:|:-----------:|
-| Go        | 23       | 1529     | 287     | 278 |
+| Go        | 24       | 1702     | 314     | 320 |
 | Bash      | 3        | 223      | 29      | 6 |
-| Markdown  | 2        | 790      | 135     | 0 |
-| **Total** | **28**   | **2542** | **451** | **284** |
+| Markdown  | 2        | 854      | 145     | 0 |
+| **Total** | **29**   | **2779** | **488** | **326** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -41,6 +41,8 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | [/api/product/create](#product-create)        | POST    | o     | x    |
 | [/api/product/update](#product-update)        | POST    | o     | o    |
 | [/api/product/delete](#product-delete)        | POST    | o     | x    |
+| [/api/product/\<id\>/photo/\<name\>/add](#product-photo-add)  | POST    | o     | x    |
+| [/api/product/\<id\>/photo/\<name\>/delete](#product-photo-delete)  | GET     | o     | x    |
 
 ## Instruções
 
@@ -50,6 +52,7 @@ Instale as dependências:
 $ go get .
 ```
 
+<!---
 OPCIONAL: Para poder utilizar sua conta GMail com SMTP no backend, crie uma "senha de app" seguindo [esse passo-a-passo](https://canaltech.com.br/internet/como-usar-o-gmail-como-servidor-smtp/). Depois, modifique o env de acordo:
 
 ```bash
@@ -58,6 +61,7 @@ $ vim initializers/env.go
 var SenderEmail string = "alexandreboutrik@alunos.utfpr.edu.br"
 var SenderPassword string = "<your app password>"
 ```
+--->
 
 Configure o PostgreSQL:
 
@@ -695,7 +699,7 @@ $ curl -s -L -X POST \
 :book:&nbsp;&nbsp;/api/product/update
 </h4>
 
-Atualiza as informações de um produto da lojinha.
+Atualiza as informações de um produto da lojinha.  
 Para modificar o estado de estoque de um produto, coloque um dos campos como verdadeiro: no-stock ou stock.
 
 | Field | Type | Required |
@@ -704,7 +708,7 @@ Para modificar o estado de estoque de um produto, coloque um dos campos como ver
 | title       | string  | no |
 | description | string  | no |
 | no-stock    | boolean | no |
-| stock       | boolean | bo |
+| stock       | boolean | no |
 
 ```bash
 $ curl -s -L -X POST \
@@ -773,6 +777,65 @@ $ curl -s -L -X POST \
 | 500    | Internal Error  | failed deleting the record |
 | 200    | OK              | - |
 
+<h4 id="product-photo-add">
+:book:&nbsp;&nbsp;/api/product/&lt;id&gt;/photo/&lt;name&gt;/add
+</h4>
+
+Adiciona uma foto para algum produto da lojinha.  
+O arquivo é salvo em ./media/product/\<id\>-\<name\>.png.
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@camiseta_datcom.png" \
+  http://localhost:8000/api/product/1/photo/first/add | jq '.'
+```
+
+```json
+{
+  "message": "photo uploaded"
+}
+```
+
+| Código | Status          | Message |
+|:------:|:---------------:|:-------:|
+| 400    | Bad Request     | required parameters are not filled |
+| 400    | Bad Request     | invalid file |
+| 400    | Bad Request     | invalid extension |
+| 401    | Unauthorized    | invalid token |
+| 403    | Forbidden       | user does not have permission |
+| 404    | Not Found       | product not found |
+| 500    | Internal Error  | failed uploading the file |
+| 500    | Internal Error  | failed updating the record |
+| 201    | Created         | - |
+
+<h4 id="product-photo-del">
+:book:&nbsp;&nbsp;/api/product/&lt;id&gt;/photo/&lt;name&gt;delete
+</h4>
+
+Remove alguma foto de algum produto da lojinha.
+
+```bash
+$ curl -s -L http://localhost:8000/api/product/1/photo/first/delete | jq '.'
+```
+
+```json
+{
+  "message": "photo deleted"
+}
+```
+
+| Código | Status          | Message |
+|:------:|:---------------:|:-------:|
+| 400    | Bad Request     | required parameters are not filled |
+| 401    | Unauthorized    | invalid token |
+| 403    | Forbidden       | user does not have permission |
+| 404    | Not Found       | product not found |
+| 500    | Internal Error  | failed deleting the file |
+| 500    | Internal Error  | failed updating the record |
+| 200    | OK              | - |
+
 ## TODO
 
-- [ ] Add photos support for the Product model.
+- Nothing.

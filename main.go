@@ -41,8 +41,8 @@ func main() {
 	router.GET("/api/document/by-category/:category", document.GetDocumentsByCategory)
 	router.POST("/api/document/upload", document.GenerateKey)
 	router.POST("/api/document/upload/:key", document.UploadDocument)
-	router.POST("/api/document/delete", document.DeleteDocument)
 	router.POST("/api/document/update", document.UpdateDocument)
+	router.POST("/api/document/delete", document.DeleteDocument)
 
 	// Product endpoints
 	router.GET("/api/products", product.GetProducts)
@@ -50,6 +50,8 @@ func main() {
 	router.POST("/api/product/create", product.CreateProduct)
 	router.POST("/api/product/update", product.UpdateProduct)
 	router.POST("/api/product/delete", product.DeleteProduct)
+	router.POST("/api/product/:id/photo/:name/add", product.PhotoAdd)
+	router.GET("/api/product/:id/photo/:name/delete", product.PhotoDelete)
 
 	router.Run("localhost:8000")
 }

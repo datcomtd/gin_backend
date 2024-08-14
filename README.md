@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas   | Blanks  | Comentários |
 |:---------:|:--------:|:--------:|:-------:|:-----------:|
-| Go        | 19       | 1218     | 222     | 217 |
-| Bash      | 3        | 200      | 28      | 5 |
-| Markdown  | 2        | 599      | 105     | 0 |
-| **Total** | **24**   | **2017** | **355** | **222** |
+| Go        | 23       | 1529     | 287     | 278 |
+| Bash      | 3        | 223      | 29      | 6 |
+| Markdown  | 2        | 790      | 135     | 0 |
+| **Total** | **28**   | **2542** | **451** | **284** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -596,6 +596,8 @@ $ curl -s -L -X POST \
 :book:&nbsp;&nbsp;/api/products
 </h4>
 
+Obtém a lista de todos os produtos da lojinha.
+
 ```bash
 $ curl -s -L http://localhost:8000/api/products | jq '.'
 ```
@@ -627,6 +629,8 @@ $ curl -s -L http://localhost:8000/api/products | jq '.'
 :book:&nbsp;&nbsp;/api/product/by-id/&lt;id&gt;
 </h4>
 
+Obtém as informações de um produto da lojinha.
+
 ```bash
 $ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
 ```
@@ -657,7 +661,7 @@ $ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
 :book:&nbsp;&nbsp;/api/product/create
 </h4>
 
-Cria um produto da lojinha.
+Cria um produto na lojinha.
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
@@ -691,18 +695,84 @@ $ curl -s -L -X POST \
 :book:&nbsp;&nbsp;/api/product/update
 </h4>
 
+Atualiza as informações de um produto da lojinha.
+Para modificar o estado de estoque de um produto, coloque um dos campos como verdadeiro: no-stock ou stock.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| id          | integer | yes |
+| title       | string  | no |
+| description | string  | no |
+| no-stock    | boolean | no |
+| stock       | boolean | bo |
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: application/json" \
+  -d "{\"id\": 1, \"title\": \"novo titulo\", \"no-stock\": true}" \
+  http://localhost:8000/api/product/update | jq '.'
+```
+
+```json
+{
+  "product": {
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "id": 1,
+      "count": 0,
+      "photos": null,
+      "title": "camiseta DATCOM",
+      "description": "",
+      "in-stock": false,
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+}
+```
+
 | Código | Status          | Message |
 |:------:|:---------------:|:-------:|
-| 501    | Not Implemented | not implemented yet |
+| 400    | Bad Request     | required fields are not filled |
+| 401    | Unauthorized    | invalid token |
+| 403    | Forbidden       | user does not have permission |
+| 404    | Not Found       | product not found |
+| 500    | Internal Error  | failed updating the record |
+| 200    | OK              | - |
 
 <h4 id="product-delete">
 :book:&nbsp;&nbsp;/api/product/delete
 </h4>
 
+Deleta um produto da lojinha.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| id    | integer | yes |
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: application/json" \
+  -d "{\"id\": 1}" \
+  http://localhost:8000/api/product/delete | jq '.'
+```
+
+```json
+{
+  "message": "product deleted"
+}
+```
+
 | Código | Status          | Message |
 |:------:|:---------------:|:-------:|
-| 501    | Not Implemented | not implemented yet |
+| 400    | Bad Request     | required fields are not filled |
+| 401    | Unauthorized    | invalid token |
+| 403    | Forbidden       | user does not have permission |
+| 404    | Not Found       | product not found |
+| 500    | Internal Error  | failed deleting the record |
+| 200    | OK              | - |
 
 ## TODO
 
-- [x] Migrate the DB from SQLite to PostgreSQL (sync to async)
+- [ ] Add photos support for the Product model.

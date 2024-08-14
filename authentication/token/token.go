@@ -1,4 +1,4 @@
-package authentication
+package token
 
 import (
 	"datcomtd/backend/initializers"

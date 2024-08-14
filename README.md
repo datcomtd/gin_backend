@@ -8,10 +8,10 @@ Estatisticas:
 
 | Linguagem | Arquivos | Linhas | Blanks | Comentários |
 |:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 18       | 1078   | 204    | 199 |
-| Bash      | 4        | 204    | 31     | 6 |
-| Markdown  | 1        | 561    | 99     | 0 |
-| **Total** | **23** | **1843** | **334** | **205** |
+| Go        | 18       | 1164   | 211    | 206 |
+| Bash      | 3        | 200    | 28     | 5 |
+| Markdown  | 1        | 558    | 97     | 0 |
+| **Total** | **22** | **1922** | **336** | **211** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -74,12 +74,6 @@ Para resetar, criar um novo banco de dados:
 $ ./reset.sh
 ```
 
-Para criar uma chave de administrador:
-
-```bash
-$ ./admin-key.sh
-```
-
 Para iniciar o backend do DATCOM-TD:
 
 ```bash
@@ -96,7 +90,8 @@ O servidor estará esperando por conexões em 127.0.0.1:8000.
 :book:&nbsp;&nbsp;/api/register
 </h4>
 
-Registra um novo usuário no banco de dados.
+Registra um novo usuário no banco de dados.  
+Somente o Presidente pode registrar novos usuários.
 
 | Enum | Role/Função |
 |:----:|:-----|
@@ -115,7 +110,8 @@ Registra um novo usuário no banco de dados.
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
-| admin-key | string | yes |
+| admin-username | string | yes |
+| admin-password | string | yes |
 | username  | string | yes |
 | email     | string | no  |
 | password  | string | yes |
@@ -124,7 +120,7 @@ Registra um novo usuário no banco de dados.
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
-  -d "{\"admin-key\": \"eb8fac70478d46e4c68c\", \"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}" \
+  -d "{\"admin-username\": \"admin\", \"admin-password\": \"eb8fac70478d46e4c68c\", \"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}" \
   http://localhost:8000/api/register | jq '.'
 ```
 
@@ -219,7 +215,8 @@ Use newpassword para atualizar a senha ao invés de password, que foi reservado 
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
-| admin-key | string | no |
+| admin-username | string | no |
+| admin-password | string | no |
 | username | string | yes |
 | password | string | yes |
 | newpassword | string | no |
@@ -267,7 +264,8 @@ Não foi implementado nenhum tipo de soft delete, então a remoção é permanen
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
-| admin-key | string | no |
+| admin-username | string | no |
+| admin-password | string | no |
 | username | string | yes |
 | password | string | yes |
 
@@ -527,7 +525,8 @@ Somente o criador (que fez upload) daquele documento tem permissão para removê
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|
-| admin-key | string | no |
+| admin-username | string | no |
+| admin-password | string | no |
 | id    | integer | yes |
 
 ```bash
@@ -557,5 +556,4 @@ $ curl -s -L -X POST \
 ## TODO
 
 - [x] Migrate the DB from SQLite to PostgreSQL (sync to async)
-- [ ] Admin-key system
 - [ ] Implement STORE endpoints

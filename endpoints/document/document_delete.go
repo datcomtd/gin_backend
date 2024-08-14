@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"datcomtd/backend/authentication"
+	"datcomtd/backend/authentication/token"
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
 
@@ -17,7 +18,7 @@ import (
 //  1. check if the required fields are filled
 //  2. check if the token is valid
 //  3. get the document record
-//  4. check if the token's user is the document creator or ADMIN-KEY
+//  4. check if the token's user is the document creator or ADMIN authority
 //  5. delete the document file
 //  6. delete the document record
 //
@@ -25,7 +26,8 @@ import (
 type document_deleteRequest struct {
 	Body string
 
-	AdminKey string `json:"admin-key"`
+	AdminUsername string `json:"admin-username"`
+	AdminPassword string `json:"admin-password"`
 
 	ID uint `json:"id"`
 }
@@ -44,7 +46,7 @@ func DeleteDocument(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid
-	username, _, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, _, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
@@ -57,10 +59,23 @@ func DeleteDocument(c *gin.Context) {
 		return
 	}
 
-	// 4. check if the token's user is the document creator or ADMIN-KEY
-	if username != document.CreatedBy && body.AdminKey != initializers.DATCOM_ADMIN_KEY {
-		c.JSON(http.StatusForbidden, gin.H{"message": "user is not the document's creator"})
-		return
+	// 4. check if the token's user is the document creator or ADMIN authority
+	if body.AdminPassword == "" {
+		if username != document.CreatedBy {
+			c.JSON(http.StatusForbidden, gin.H{"message": "user is not the document's creator"})
+			return
+		}
+	} else {
+		// 4.B. ADMIN authority
+		if body.AdminUsername != initializers.Admin.Username {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
+			return
+		}
+		bl := authentication.VerifyPassword(body.AdminPassword, initializers.Admin.Password)
+		if bl != true {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
+			return
+		}
 	}
 
 	// 5. delete the document file

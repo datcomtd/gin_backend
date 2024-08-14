@@ -16,14 +16,15 @@ import (
 //  0. retrieve post data
 //  1. check if the required fields are filled
 //  2. check if the user exists
-//  3. check if the password is correct or ADMIN-KEY
+//  3. check if the password is correct or ADMIN authority
 //  4. delete the user record
 //
 
 type user_deleteRequest struct {
 	Body string
 
-	AdminKey string `json:"admin-key"`
+	AdminUsername string `json:"admin-username"`
+	AdminPassword string `json:"admin-password"`
 
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -49,11 +50,24 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	// 3. check if the password is correct or ADMIN-KEY
-	bl := authentication.VerifyPassword(body.Password, user.Password)
-	if bl != true && body.AdminKey != initializers.DATCOM_ADMIN_KEY {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
-		return
+	// 3. check if the password is correct or ADMIN authority
+	if body.AdminPassword == "" {
+		bl := authentication.VerifyPassword(body.Password, user.Password)
+		if bl != true {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+			return
+		}
+	} else {
+		// 3.B. ADMIN authority
+		if body.AdminUsername != initializers.Admin.Username {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
+			return
+		}
+		bl := authentication.VerifyPassword(body.AdminPassword, initializers.Admin.Password)
+		if bl != true {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
+			return
+		}
 	}
 
 	// 4. delete the user record

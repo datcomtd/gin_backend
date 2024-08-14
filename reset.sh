@@ -23,8 +23,11 @@ fi
 
 pwd=$(echo $RANDOM | md5sum | head -c 10)
 echo -e "[\e[33;1m!\e[0m] new password: ${pwd}"
-
 sed -i "s,.*DATCOM_DB_PWD.*,var DATCOM_DB_PWD string = \"${pwd}\",g" initializers/env.go
+
+pwd=$(echo $RANDOM | md5sum | head -c 32)
+echo -e "[\e[33;1m!\e[0m] admin password: ${pwd}"
+sed -i "s,.*DATCOM_ADMIN_PWD.*,var DATCOM_ADMIN_PWD string = \"${pwd}\",g" initializers/env.go
 
 Try 33 "!" "drop database datcom_db;"
 Try 33 "!" "drop user datcom_user;"

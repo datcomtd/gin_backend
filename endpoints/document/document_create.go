@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"datcomtd/backend/authentication"
+	"datcomtd/backend/authentication/token"
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
 	"datcomtd/backend/utils"
@@ -56,7 +57,7 @@ func GenerateKey(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid and get the token's username
-	username, userrole, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
@@ -108,7 +109,7 @@ func UploadDocument(c *gin.Context) {
 	var document models.Document
 
 	// 1. check if the token is valid
-	username, userrole, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return

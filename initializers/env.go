@@ -14,7 +14,7 @@ var SIZE_DOCUMENT_KEY int8 = 8
 
 // WARNING: CAREFUL EDIT
 var DATCOM_ADMIN_USER string = "admin"
-var DATCOM_ADMIN_PWD string = "5a399860ecef529b27d390a1241dc688"
+var DATCOM_ADMIN_PWD string = "465d8198e2460bc7543608fd9083ecb2"
 
 // WARNING: DO NOT EDIT
-var DATCOM_DB_PWD string = "96de2fb918"
+var DATCOM_DB_PWD string = "f9631eac76"

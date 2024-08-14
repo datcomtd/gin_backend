@@ -34,6 +34,14 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | [/api/document/update](#doc-update)                          | POST    | o     | x |
 | [/api/document/delete](#doc-delete)                          | POST    | o     | x |
 
+| PRODUCT Endpoint                              | Request | Token | Auth |
+|:----------------------------------------------|:-------:|:-----:|:----:|
+| [/api/products](#product-read-all)            | GET     | x     | x    |
+| [/api/product/by-id/\<id\>](#product-read-id) | GET     | x     | x    |
+| [/api/product/create](#product-create)        | POST    | o     | x    |
+| [/api/product/update](#product-update)        | POST    | o     | o    |
+| [/api/product/delete](#product-delete)        | POST    | o     | x    |
+
 ## Instruções
 
 Instale as dependências:
@@ -582,7 +590,119 @@ $ curl -s -L -X POST \
 | 500    | Internal Error | failed deleting the record |
 | 200    | OK             | document deleted |
 
+### PRODUCT endpoints
+
+<h4 id="product-read-all">
+:book:&nbsp;&nbsp;/api/products
+</h4>
+
+```bash
+$ curl -s -L http://localhost:8000/api/products | jq '.'
+```
+
+```json
+{
+  "product": [
+    {
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "id": 1,
+      "count": 0,
+      "photos": null,
+      "title": "camiseta DATCOM",
+      "description": "",
+      "in-stock": true,
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+  ]
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 200    | OK             | - |
+
+<h4 id="product-read-id">
+:book:&nbsp;&nbsp;/api/product/by-id/&lt;id&gt;
+</h4>
+
+```bash
+$ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
+```
+
+```json
+{
+  "product": {
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "id": 1,
+      "count": 0,
+      "photos": null,
+      "title": "camiseta DATCOM",
+      "description": "",
+      "in-stock": true,
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    }
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 404    | Not Found      | product not found |
+| 200    | OK             | - |
+
+<h4 id="product-create">
+:book:&nbsp;&nbsp;/api/product/create
+</h4>
+
+Cria um produto da lojinha.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| title       | string  | yes |
+| description | string  | no |
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: application/json" \
+  -d "{\"title\": \"Camiseta DATCOM-TD\", \"description\": \"...\"}" \
+  http://localhost:8000/api/product/create | jq '.'
+```
+
+```json
+{
+  "message": "product created"
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 400    | Bad Request    | product already exists |
+| 401    | Unauthorized   | invalid token |
+| 403    | Forbidden      | user does not have permission |
+| 500    | Internal Error | failed creating the record |
+| 201    | Created        | - |
+
+<h4 id="product-update">
+:book:&nbsp;&nbsp;/api/product/update
+</h4>
+
+| Código | Status          | Message |
+|:------:|:---------------:|:-------:|
+| 501    | Not Implemented | not implemented yet |
+
+<h4 id="product-delete">
+:book:&nbsp;&nbsp;/api/product/delete
+</h4>
+
+| Código | Status          | Message |
+|:------:|:---------------:|:-------:|
+| 501    | Not Implemented | not implemented yet |
+
 ## TODO
 
 - [x] Migrate the DB from SQLite to PostgreSQL (sync to async)
-- [ ] Implement STORE endpoints

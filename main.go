@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"datcomtd/backend/endpoints/document"
+	"datcomtd/backend/endpoints/product"
 	"datcomtd/backend/endpoints/token"
 	"datcomtd/backend/endpoints/user"
 
@@ -42,6 +43,13 @@ func main() {
 	router.POST("/api/document/upload/:key", document.UploadDocument)
 	router.POST("/api/document/delete", document.DeleteDocument)
 	router.POST("/api/document/update", document.UpdateDocument)
+
+	// Product endpoints
+	router.GET("/api/products", product.GetProducts)
+	router.GET("/api/product/by-id/:id", product.GetProductByID)
+	router.POST("/api/product/create", product.CreateProduct)
+	router.POST("/api/product/update", product.UpdateProduct)
+	router.POST("/api/product/delete", product.DeleteProduct)
 
 	router.Run("localhost:8000")
 }

@@ -62,13 +62,8 @@ func Register(c *gin.Context) {
 
 	// 2. check if the admin password is correct
 	// 2.0. hash the body password
-	hashedPassword, err := authentication.HashPassword(body.AdminPassword)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed hashing the password"})
-		return
-	}
-	// 2.1. check
-	if hashedPassword != initializers.Admin.Password {
+	bl := authentication.VerifyPassword(body.AdminPassword, initializers.Admin.Password)
+	if bl != true {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
 		return
 	}
@@ -87,7 +82,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 6. hash the body password
-	hashedPassword, err = authentication.HashPassword(body.Password)
+	hashedPassword, err := authentication.HashPassword(body.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed hashing the password"})
 		return

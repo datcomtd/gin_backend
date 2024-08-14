@@ -33,11 +33,11 @@ func UploadPicture(c *gin.Context) {
 		return
 	}
 
-	extention := filepath.Ext(file.Filename)
-	save_path := "./media/user/" + username + extention
+	extension := filepath.Ext(file.Filename)
+	save_path := "./media/member/" + username + extension
 
 	// 3. check if the file is valid
-	if extention != ".png" {
+	if extension != ".png" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid extension"})
 		return
 	}

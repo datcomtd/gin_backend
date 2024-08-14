@@ -13,6 +13,7 @@ import (
 
 func init() {
 	initializers.ConnectToDB()
+	initializers.SetupAdmin()
 }
 
 func main() {

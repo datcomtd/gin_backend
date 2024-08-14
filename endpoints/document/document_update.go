@@ -1,7 +1,7 @@
 package document
 
 import (
-	"datcomtd/backend/authentication"
+	"datcomtd/backend/authentication/token"
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
 	"net/http"
@@ -42,7 +42,7 @@ func UpdateDocument(c *gin.Context) {
 	c.Bind(&body)
 
 	// 1. check if the token exists
-	username, userrole, errCode, errString := authentication.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return

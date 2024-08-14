@@ -39,7 +39,7 @@ type Document struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time
 
-	ID  uint `json:"id" gorm:"primaryKey"`
+	ID  uint `json:"id" gorm:"primaryKey;unique"`
 	Key string
 
 	Filename    string
@@ -57,10 +57,10 @@ type Product struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time
 
-	ID uint `json:"id" gorm:"primaryKey"`
+	ID uint `json:"id" gorm:"primaryKey;unique"`
 
-	Count  uint           `json:"count"`
-	Photos pq.StringArray `json:"photos" gorm:"type:text[]"`
+	Count  int            `json:"count"`
+	Photos pq.StringArray `json:"photo" gorm:"type:text[]"`
 
 	Title       string `json:"title"`
 	Description string `json:"description"`

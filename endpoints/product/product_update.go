@@ -67,6 +67,7 @@ func UpdateProduct(c *gin.Context) {
 	}
 
 	// 5. update the product fields
+	product.LastUpdatedBy = username
 	// 5.1. title
 	if body.Title != "" {
 		product.Title = body.Title

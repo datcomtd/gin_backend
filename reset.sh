@@ -21,9 +21,9 @@ if [ $? -ne 52 ]; then
   exit
 fi
 
-pwd=$(echo $RANDOM | md5sum | head -c 10)
-echo -e "[\e[33;1m!\e[0m] new password: ${pwd}"
-sed -i "s,.*DATCOM_DB_PWD.*,var DATCOM_DB_PWD string = \"${pwd}\",g" initializers/env.go
+db_pwd=$(echo $RANDOM | md5sum | head -c 10)
+echo -e "[\e[33;1m!\e[0m] new password: ${db_pwd}"
+sed -i "s,.*DATCOM_DB_PWD.*,var DATCOM_DB_PWD string = \"${db_pwd}\",g" initializers/env.go
 
 pwd=$(echo $RANDOM | md5sum | head -c 32)
 echo -e "[\e[33;1m!\e[0m] admin password: ${pwd}"

@@ -160,7 +160,7 @@ func UploadDocument(c *gin.Context) {
 		}
 	}
 	// 7.2. save the file to disk
-	err = c.SaveUploadedFile(file, "./media/"+document.Key+"_"+document.Filename)
+	err = c.SaveUploadedFile(file, "./media/document/"+document.Key+"_"+document.Filename)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed saving the document"})
 		return

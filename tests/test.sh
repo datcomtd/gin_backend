@@ -5,8 +5,11 @@ source ./load.sh
 #Print "should return 'required fields are not filled'"
 #add_user "{\"username\": \"patrick\", \"password\": \"patrick123\", \"course\": 1}"
 
+# get admin credentials
+ADMIN_PWD=$(cat ../initializers/env.go | grep ADMIN_PWD | awk {'print $NF'} | sed -e "s,\",,g")
+
 Print "add the computer engineer president"
-add_user "{\"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}"
+add_user "{\"admin-username\": \"admin\", \"admin-password\": \"${ADMIN_PWD}\", \"username\": \"patrick\", \"password\": \"patrick123\", \"role\": 1, \"course\": 1}"
 
 Print "list user: patrick"
 list_user "patrick"
@@ -37,3 +40,9 @@ list_documents
 
 Print "deleting the document"
 delete_document "${token}" "{\"id\": 1}"
+
+Print "creating a product"
+create_product "${token}" "{\"title\": \"camiseta DATCOM\"}"
+
+Print "list all products"
+list_products

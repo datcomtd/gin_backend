@@ -114,3 +114,17 @@ function update_document() {
     http://localhost:8000/api/document/update | jq '.'
   echo
 }
+
+function create_product() {
+  token="${1}"
+  shift
+
+  curl -s -L -X POST -H "Content-Type: application/json" \
+    -H "Authorization: ${token}" \
+    -d "${*}" \
+    http://localhost:8000/api/product/create | jq '.'
+}
+
+function list_products() {
+  curl -s -L http://localhost:8000/api/products | jq '.'
+}

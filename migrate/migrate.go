@@ -10,6 +10,8 @@ func init() {
 }
 
 func main() {
-	// migrate the schema
-	initializers.DB.AutoMigrate(&models.User{}, &models.Document{})
+	// migrate the schemas
+	initializers.DB.AutoMigrate(&models.User{})
+	initializers.DB.AutoMigrate(&models.Document{})
+	initializers.DB.AutoMigrate(&models.Product{})
 }

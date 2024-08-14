@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/lib/pq"
 )
 
 const (
@@ -46,6 +48,24 @@ type Document struct {
 
 	Source   string `json:"source"`
 	Category string `json:"category"`
+
+	CreatedBy     string `json:"created-by"`
+	LastUpdatedBy string `json:"last-updated-by"`
+}
+
+type Product struct {
+	CreatedAt time.Time
+	UpdateAt  time.Time
+
+	ID uint `json:"id" gorm:"primaryKey"`
+
+	Count  uint           `json:"count"`
+	Photos pq.StringArray `json:"photos" gorm:"type:text[]"`
+
+	Title       string `json:"title"`
+	Description string `json:"description"`
+
+	InStock bool `json:"in-stock"`
 
 	CreatedBy     string `json:"created-by"`
 	LastUpdatedBy string `json:"last-updated-by"`

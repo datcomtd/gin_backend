@@ -6,12 +6,12 @@ Esse repositório contém uma implementação de uma REST API para o backend do 
 
 Estatisticas:
 
-| Linguagem | Arquivos | Linhas | Blanks | Comentários |
-|:---------:|:--------:|:------:|:------:|:-----------:|
-| Go        | 19       | 1218   | 222    | 217 |
-| Bash      | 3        | 200    | 28     | 5 |
-| Markdown  | 1        | 588    | 102    | 0 |
-| **Total** | **23** | **2006** | **352** | **222** |
+| Linguagem | Arquivos | Linhas   | Blanks  | Comentários |
+|:---------:|:--------:|:--------:|:-------:|:-----------:|
+| Go        | 19       | 1218     | 222     | 217 |
+| Bash      | 3        | 200      | 28      | 5 |
+| Markdown  | 2        | 599      | 105     | 0 |
+| **Total** | **24**   | **2017** | **355** | **222** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 

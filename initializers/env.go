@@ -1,12 +1,10 @@
 package initializers
 
 // ---------------
-// Email
+// Docker
 // ---------------
-// not implemented yet.
 
-var SenderEmail string = "alexandreboutrik@alunos.utfpr.edu.br"
-var SenderPassword string = ""
+var DATCOM_DOCKER bool = true
 
 // ---------------
 // Token & Keys
@@ -22,7 +20,7 @@ var SIZE_DOCUMENT_KEY int8 = 8        // document upload key size
 
 // WARNING: CAREFUL EDIT
 var DATCOM_ADMIN_USER string = "admin"
-var DATCOM_ADMIN_PWD string = "67d0deba6233482c69f156c992fe57ce"
+var DATCOM_ADMIN_PWD string = "c39a690203eb9300001addefb63461c5"
 
 // WARNING: DO NOT EDIT
-var DATCOM_DB_PWD string = "05eb32afc1"
+var DATCOM_DB_PWD string = "27ba0f8d32"

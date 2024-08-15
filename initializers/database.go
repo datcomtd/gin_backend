@@ -15,8 +15,15 @@ var DB *gorm.DB
 
 func ConnectToDB() {
 	var err error
+	var dbhost string
 
-	DSN := "host=localhost user=datcom_user password=" + DATCOM_DB_PWD + " dbname=datcom_db port=4145 sslmode=disable TimeZone=Europe/London"
+	if DATCOM_DOCKER == true {
+		dbhost = "postgres"
+	} else {
+		dbhost = "localhost"
+	}
+
+	DSN := "host=" + dbhost + " user=datcom_user password=" + DATCOM_DB_PWD + " dbname=datcom_db port=4145 sslmode=disable TimeZone=Europe/London"
 
 	DB, err = gorm.Open(postgres.New(postgres.Config{
 		DSN:                  DSN,

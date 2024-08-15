@@ -4,6 +4,7 @@
 
 ### 2024-08 Aug
 
+- [`bdd562c`]: add product\_photo endpoints (add and delete).
 - [`44c98ed`]: add product\_update and product_\delete endpoints.
 - [`be1a7f5`]: fix ADMIN model credentials and other minor bugs, add product\_read and product\_read endpoints.
 - [`c15861f`]: add user\_picture endpoint for uploading the profile pictures.

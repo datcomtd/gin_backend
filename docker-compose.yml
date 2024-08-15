@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: datcom_db
+      POSTGRES_USER: datcom_user
+      POSTGRES_PASSWORD: 27ba0f8d32
+    command: -p 4145
+    expose:
+      - "4145"
+    ports: !override
+      - "4145:4145"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+  server:
+    restart: on-failure
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_DB: datcom_db
+      POSTGRES_USER: datcom_user
+      POSTGRES_PASSWORD: 27ba0f8d32
+    links:
+      - postgres
+
+    ports:
+      - "8000:8000"
+
+volumes:
+  data:

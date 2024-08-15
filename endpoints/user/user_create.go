@@ -23,6 +23,7 @@ import (
 //  5. check if the user is already registered
 //  6. hash the body password
 //  7. create a record in the database
+//  8. if role is President, update ADMIN credentials
 //
 
 type user_registerRequest struct {
@@ -55,7 +56,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 1. check if the admin username is valid
-	if body.AdminUsername != initializers.DATCOM_ADMIN_USER {
+	if body.AdminUsername != initializers.Admin.Username {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
 		return
 	}
@@ -106,6 +107,11 @@ func Register(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed creating the record"})
 		return
+	}
+
+	// 8. if role is President, update ADMIN credentials
+	if user.Role == models.President {
+		initializers.Admin = &user
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"user": user})

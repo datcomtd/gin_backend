@@ -1,17 +1,18 @@
-# DATCOM-TD backend
+# DATCOM backend
 
 <img align="right" width="128px" src=".media/coffee.png">
 
-Esse repositório contém uma implementação de uma REST API para o backend do site do DATCOM-TD. Foi escrito em [Go](https://go.dev/) utilizando o framework [Gin](https://github.com/gin-gonic/gin/).
+Esse repositório contém uma implementação de uma REST API para o backend do site do DATCOM. Foi escrito em [Go](https://go.dev/) utilizando o framework [Gin](https://github.com/gin-gonic/gin/).
 
 Estatisticas:
 
-| Linguagem | Arquivos | Linhas   | Blanks  | Comentários |
-|:---------:|:--------:|:--------:|:-------:|:-----------:|
-| Go        | 24       | 1702     | 314     | 320 |
-| Bash      | 3        | 223      | 29      | 6 |
-| Markdown  | 2        | 854      | 145     | 0 |
-| **Total** | **29**   | **2779** | **488** | **326** |
+| Linguagem  | Arquivos | Linhas   | Blanks  | Comentários |
+|:----------:|:--------:|:--------:|:-------:|:-----------:|
+| Go         | 24       | 1707     | 315     | 319 |
+| Bash       | 3        | 240      | 33      | 6 |
+| Markdown   | 2        | 879      | 152     | 0 |
+| YAML       | 1        | 36       | 3       | 0 |
+| **Total**  | **30**   | **2862** | **503** | **325** |
 
 As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 
@@ -44,6 +45,33 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | [/api/product/\<id\>/photo/\<name\>/add](#product-photo-add)  | POST    | o     | x    |
 | [/api/product/\<id\>/photo/\<name\>/delete](#product-photo-delete)  | GET     | o     | x    |
 
+## Docker
+
+Se possível, use o script reset.sh para criar novas credenciais:
+
+```bash
+$ ./reset.sh
+[-] postgresql não iniciado
+Deseja continuar? [s/N] s
+Deseja resetar a data do Docker? [s/N] s
+[!] docker data deleted
+[!] new password: 27ba0f8d32
+[!] admin password: c39a690203eb9300001addefb63461c5
+```
+
+Modifique o GIN\_MODE caso necessário:
+
+```bash
+$ vim Dockerfile
+ENV GIN_MODE=release
+```
+
+Inicialize os containers:
+
+```bash
+$ sudo docker compose up --build
+```
+
 ## Instruções
 
 Instale as dependências:
@@ -51,17 +79,6 @@ Instale as dependências:
 ```bash
 $ go get .
 ```
-
-<!---
-OPCIONAL: Para poder utilizar sua conta GMail com SMTP no backend, crie uma "senha de app" seguindo [esse passo-a-passo](https://canaltech.com.br/internet/como-usar-o-gmail-como-servidor-smtp/). Depois, modifique o env de acordo:
-
-```bash
-# OPCIONAL
-$ vim initializers/env.go
-var SenderEmail string = "alexandreboutrik@alunos.utfpr.edu.br"
-var SenderPassword string = "<your app password>"
-```
---->
 
 Configure o PostgreSQL:
 
@@ -73,6 +90,13 @@ port = 4145
 $ sudo vim /etc/postgresql-16/pg_hba.conf # caso exista esse arquivo
 local all postgres trust
 local all all md5
+```
+
+Modifique o initializers/env.go para não utilizar o Docker:
+
+```bash
+$ vim initializers/env.go
+var DATCOM_DOCKER bool = false
 ```
 
 Inicie o servidor do postgres:
@@ -158,7 +182,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 | 400    | Bad Request    | required fields are not filled |
 | 400    | Bad Request    | user is already registered |
 | 400    | Bad Request    | invalid course |
-| 401    | Unauthorized   | invalid admin-key |
+| 401    | Unauthorized   | invalid admin username or password |
 | 500    | Internal Error | failed hashing the password |
 | 500    | Internal Error | failed creating the record |
 | 201    | Created        | - |
@@ -811,7 +835,7 @@ $ curl -s -L -X POST \
 | 201    | Created         | - |
 
 <h4 id="product-photo-del">
-:book:&nbsp;&nbsp;/api/product/&lt;id&gt;/photo/&lt;name&gt;delete
+:book:&nbsp;&nbsp;/api/product/&lt;id&gt;/photo/&lt;name&gt;/delete
 </h4>
 
 Remove alguma foto de algum produto da lojinha.

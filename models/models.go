@@ -28,7 +28,7 @@ type User struct {
 	Token           string
 	Password        string
 
-	Username string `json:"name" gorm:"primaryKey;unique"`
+	Username string `json:"name" gorm:"primaryKey"`
 	Email    string `json:"email"`
 
 	Role   uint `json:"role"`
@@ -39,7 +39,7 @@ type Document struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time
 
-	ID  uint `json:"id" gorm:"primaryKey;unique"`
+	ID  uint `json:"id" gorm:"primaryKey"`
 	Key string
 
 	Filename    string
@@ -57,7 +57,7 @@ type Product struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time
 
-	ID uint `json:"id" gorm:"primaryKey;unique"`
+	ID uint `json:"id" gorm:"primaryKey"`
 
 	Count  int            `json:"count"`
 	Photos pq.StringArray `json:"photo" gorm:"type:text[]"`

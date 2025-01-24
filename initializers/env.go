@@ -4,7 +4,7 @@ package initializers
 // Docker
 // ---------------
 
-var DATCOM_DOCKER bool = true
+var DATCOM_DOCKER bool = false
 
 // ---------------
 // Token & Keys
@@ -20,7 +20,7 @@ var SIZE_DOCUMENT_KEY int8 = 8        // document upload key size
 
 // WARNING: CAREFUL EDIT
 var DATCOM_ADMIN_USER string = "admin"
-var DATCOM_ADMIN_PWD string = "c39a690203eb9300001addefb63461c5"
+var DATCOM_ADMIN_PWD string = "c7482c144fd4a4cc7aa4f5aea4bdd412"
 
 // WARNING: DO NOT EDIT
-var DATCOM_DB_PWD string = "27ba0f8d32"
+var DATCOM_DB_PWD string = "e8144f625a"

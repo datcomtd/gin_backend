@@ -18,18 +18,6 @@ Estatisticas:
 
 ## Docker
 
-Se possível, use o script reset.sh para criar novas credenciais:
-
-```bash
-$ ./reset.sh
-[-] postgresql não iniciado
-Deseja continuar? [s/N] s
-Deseja resetar a data do Docker? [s/N] s
-[!] docker data deleted
-[!] new password: 27ba0f8d32
-[!] admin password: c39a690203eb9300001addefb63461c5
-```
-
 Modifique o GIN\_MODE caso necessário:
 
 ```bash
@@ -40,8 +28,15 @@ ENV GIN_MODE=release
 Inicialize os containers:
 
 ```bash
-$ sudo docker compose up --build
+$ ./docker.sh <container> ...
+
+# Inicia somente o gin_backend
+$ ./docker.sh backend
+# Inicia ambos os containers: postgresql e o gin_backend
+$ ./docker.sh pg backend
 ```
+
+O servidor estará esperando por conexões em 127.0.0.1:8000.
 
 ## Instruções
 

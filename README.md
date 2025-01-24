@@ -89,6 +89,10 @@ O servidor estará esperando por conexões em 127.0.0.1:8000.
 
 A documentação completa da API está disponível no arquivo [DOCUMENTATION-API.md](DOCUMENTATION-API.md). Ela contém informações detalhadas sobre o uso das endpoints (rotas), parâmetros e exemplos de requisições e respostas. Recomenda-se a leitura antes de iniciar o desenvolvimento.
 
+## Segurança
+
+Se você descobrir uma vulnerabilidade de segurança, consulte nossa [Política de Segurança](SECURITY.md) para mais detalhes.
+
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute the code as needed. See the [LICENSE](LICENSE) file for more information.

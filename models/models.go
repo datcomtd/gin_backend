@@ -31,8 +31,9 @@ type User struct {
 	Username string `json:"name" gorm:"primaryKey"`
 	Email    string `json:"email"`
 
-	Role   uint `json:"role"`
-	Course uint `json:"course"`
+	Role   uint   `json:"role"`
+	Course uint   `json:"course"`
+	RA     string `json:"ra"`
 }
 
 type Document struct {

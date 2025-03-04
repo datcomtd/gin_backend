@@ -10,11 +10,10 @@ Estatisticas:
 
 | Linguagem  | Arquivos | Linhas   | Blanks  | Comentários |
 |:----------:|:--------:|:--------:|:-------:|:-----------:|
-| Go         | 24       | 1714     | 316     | 321 |
-| Bash       | 3        | 240      | 33      | 6 |
-| Markdown   | 3        | 896      | 160     | 0 |
-| YAML       | 1        | 36       | 3       | 0 |
-| **Total**  | **31**   | **2886** | **512** | **327** |
+| Go         | 24       | 1721     | 316     | 322 |
+| Bash       | 4        | 302      | 41      | 7 |
+| Markdown   | 4        | 933      | 175     | 0 |
+| **Total**  | **32**   | **2956** | **532** | **329** |
 
 ## Docker
 
@@ -37,6 +36,9 @@ $ ./docker.sh pg backend
 ```
 
 O servidor estará esperando por conexões em 127.0.0.1:8000.
+
+> [!CAUTION]
+> Caso esteja inicializando um container PostgreSQL via docker.sh, lembre-se de salvar o banco de dados antes de fazer qualquer outra operação pelo script (como reiniciar por exemplo).
 
 ## Instruções
 

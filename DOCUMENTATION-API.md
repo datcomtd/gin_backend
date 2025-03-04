@@ -70,6 +70,7 @@ Somente o Presidente pode registrar novos usuários.
 | password  | string | yes |
 | role      | enum   | yes |
 | course    | enum   | yes |
+| ra        | string | no  |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \
@@ -176,6 +177,7 @@ Use newpassword para atualizar a senha ao invés de password, que foi reservado 
 | email  | string | no |
 | role   | enum   | no |
 | course | enum   | no |
+| ra     | string | no |
 
 ```bash
 $ curl -s -L -X POST -H "Content-Type: application/json" \

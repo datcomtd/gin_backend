@@ -37,8 +37,9 @@ type user_registerRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 
-	Role   uint `json:"role"`
-	Course uint `json:"course"`
+	Role   uint   `json:"role"`
+	Course uint   `json:"course"`
+	RA     string `json:"ra"`
 }
 
 func Register(c *gin.Context) {
@@ -101,6 +102,7 @@ func Register(c *gin.Context) {
 
 		Role:   body.Role,
 		Course: body.Course,
+		RA:     body.RA,
 	}
 	// 7.2. insert the model into the database
 	result = initializers.DB.Create(&user)

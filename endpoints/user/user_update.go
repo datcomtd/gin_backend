@@ -33,8 +33,9 @@ type user_updateRequest struct {
 	NewPassword string `json:"newpassword"`
 	Email       string `json:"email"`
 
-	Role   uint `json:"role"`
-	Course uint `json:"course"`
+	Role   uint   `json:"role"`
+	Course uint   `json:"course"`
+	RA     string `json:"ra"`
 }
 
 func UpdateUser(c *gin.Context) {
@@ -105,6 +106,10 @@ func UpdateUser(c *gin.Context) {
 	// 4.4. course field
 	if body.Course != 0 {
 		user.Course = body.Course
+	}
+	// 4.5. ra field
+	if body.RA != "" {
+		user.RA = body.RA
 	}
 
 	// 5. update the user record in the database

@@ -30,9 +30,11 @@ func GetUsers(c *gin.Context) {
 	var users []public_User
 
 	// 1. get all user records
-	initializers.DB.Model(&models.User{}).Find(&users)
+	result := initializers.DB.Model(&models.User{}).Find(&users)
 
-	c.JSON(http.StatusOK, gin.H{"user": users})
+	c.JSON(http.StatusOK, gin.H{
+		"count": result.RowsAffected,
+		"user":  users})
 }
 
 func GetUserByUsername(c *gin.Context) {

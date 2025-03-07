@@ -44,7 +44,7 @@ func GetProductByID(c *gin.Context) {
 func GetProductByCategory(c *gin.Context) {
 	var products []models.Product
 
-	result := initializers.DB.Model(&models.Product{}).Where("category = ?", c.Param("category")).Find(&products)
+	result := initializers.DB.Model(&models.Product{}).Where("category LIKE ?", c.Param("category")).Find(&products)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "product not found"})
 		return

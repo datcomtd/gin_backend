@@ -49,7 +49,7 @@ func GetDocumentsByCategory(c *gin.Context) {
 	var documents []models.Document
 
 	// 1. get all document records by category
-	result := initializers.DB.Model(&models.Document{}).Where("category = ?", strings.ToLower(c.Param("category"))).Find(&documents)
+	result := initializers.DB.Model(&models.Document{}).Where("category LIKE ?", strings.ToLower(c.Param("category"))).Find(&documents)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "document not found"})
 		return

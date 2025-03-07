@@ -65,8 +65,10 @@ type Product struct {
 
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Category    string `json:"category"`
 
-	InStock bool `json:"in-stock"`
+	Price   float64 `json:"price"`
+	InStock bool    `json:"in-stock"`
 
 	CreatedBy     string `json:"created-by"`
 	LastUpdatedBy string `json:"last-updated-by"`

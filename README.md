@@ -2,7 +2,7 @@
 
 <img align="right" width="128px" src=".media/coffee.png" />
 
-![Version Badge](https://img.shields.io/badge/version-v1.0.0--beta-blue)
+![Version Badge](https://img.shields.io/badge/version-v1.0.1--beta-blue)
 
 Esse repositório contém uma implementação de uma REST API para o backend do site do DATCOM. Foi escrito em [Go](https://go.dev/) utilizando o framework [Gin](https://github.com/gin-gonic/gin/).
 
@@ -10,10 +10,10 @@ Estatisticas:
 
 | Linguagem  | Arquivos | Linhas   | Blanks  | Comentários |
 |:----------:|:--------:|:--------:|:-------:|:-----------:|
-| Go         | 24       | 1721     | 316     | 322 |
+| Go         | 24       | 1763     | 320     | 324 |
 | Bash       | 4        | 302      | 41      | 7 |
-| Markdown   | 4        | 933      | 175     | 0 |
-| **Total**  | **32**   | **2956** | **532** | **329** |
+| Markdown   | 4        | 963      | 180     | 0 |
+| **Total**  | **32**   | **3028** | **541** | **331** |
 
 ## Docker
 

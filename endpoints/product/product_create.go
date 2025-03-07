@@ -25,6 +25,9 @@ type product_createRequest struct {
 
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Category    string `json:"category"`
+
+	Price float64 `json:"price"`
 }
 
 func CreateProduct(c *gin.Context) {
@@ -65,7 +68,9 @@ func CreateProduct(c *gin.Context) {
 	product = models.Product{
 		Title:       body.Title,
 		Description: body.Description,
+		Category:    body.Category,
 
+		Price:   body.Price,
 		InStock: true,
 
 		CreatedBy:     username,

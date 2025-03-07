@@ -25,9 +25,11 @@ func GetDocuments(c *gin.Context) {
 	var documents []models.Document
 
 	// 1. get all document records
-	initializers.DB.Model(&models.Document{}).Find(&documents)
+	result := initializers.DB.Model(&models.Document{}).Find(&documents)
 
-	c.JSON(http.StatusOK, gin.H{"document": documents})
+	c.JSON(http.StatusOK, gin.H{
+		"count":    result.RowsAffected,
+		"document": documents})
 }
 
 func GetDocumentByID(c *gin.Context) {
@@ -47,7 +49,13 @@ func GetDocumentsByCategory(c *gin.Context) {
 	var documents []models.Document
 
 	// 1. get all document records by category
-	initializers.DB.Model(&models.Document{}).Where("category = ?", strings.ToLower(c.Param("category"))).Find(&documents)
+	result := initializers.DB.Model(&models.Document{}).Where("category = ?", strings.ToLower(c.Param("category"))).Find(&documents)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "document not found"})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"document": documents})
+	c.JSON(http.StatusOK, gin.H{
+		"count":    result.RowsAffected,
+		"document": documents})
 }

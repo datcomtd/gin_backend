@@ -47,6 +47,7 @@ func main() {
 	// Product endpoints
 	router.GET("/api/products", product.GetProducts)
 	router.GET("/api/product/by-id/:id", product.GetProductByID)
+	router.GET("/api/product/by-category/:category", product.GetProductByCategory)
 	router.POST("/api/product/create", product.CreateProduct)
 	router.POST("/api/product/update", product.UpdateProduct)
 	router.POST("/api/product/delete", product.DeleteProduct)

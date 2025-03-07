@@ -29,6 +29,7 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 |:----------------------------------------------|:-------:|:-----:|:----:|
 | [/api/products](#product-read-all)            | GET     | x     | x    |
 | [/api/product/by-id/\<id\>](#product-read-id) | GET     | x     | x    |
+| [/api/product/by-category/\<category/>](#product-category) | GET | x | x |
 | [/api/product/create](#product-create)        | POST    | o     | x    |
 | [/api/product/update](#product-update)        | POST    | o     | o    |
 | [/api/product/delete](#product-delete)        | POST    | o     | x    |
@@ -285,6 +286,7 @@ $ curl -s -L http://localhost:8000/api/documents | jq '.'
 
 ```json
 {
+  "count": 1,
   "document": [
     {
       "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
@@ -550,6 +552,7 @@ $ curl -s -L http://localhost:8000/api/products | jq '.'
 
 ```json
 {
+  "count": 1,
   "product": [
     {
       "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
@@ -603,6 +606,41 @@ $ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
 | 404    | Not Found      | product not found |
 | 200    | OK             | - |
 
+<h4 id="product-category">
+:book:&nbsp;&nbsp;/api/product/by-category/&lt;category&gt;
+</h4>
+
+Obtém as informações de um produto da lojinha pelo campo categoria.
+
+```bash
+$ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
+```
+
+```json
+{
+  "count": 1,
+  "product": [
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "id": 1,
+      "count": 0,
+      "photos": null,
+      "title": "camiseta DATCOM",
+      "description": "",
+      "in-stock": true,
+      "created-by": "patrick",
+      "last-updated-by": "patrick"
+    ]
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 404    | Not Found      | product not found |
+| 200    | OK             | - |
+
+
+
 <h4 id="product-create">
 :book:&nbsp;&nbsp;/api/product/create
 </h4>
@@ -613,6 +651,8 @@ Cria um produto na lojinha.
 |:-----:|:----:|:--------:|
 | title       | string  | yes |
 | description | string  | no |
+| category    | string  | no |
+| price       | float   | no |
 
 ```bash
 $ curl -s -L -X POST \
@@ -649,6 +689,8 @@ Para modificar o estado de estoque de um produto, coloque um dos campos como ver
 | id          | integer | yes |
 | title       | string  | no |
 | description | string  | no |
+| category    | string  | no |
+| price       | float   | no |
 | no-stock    | boolean | no |
 | stock       | boolean | no |
 

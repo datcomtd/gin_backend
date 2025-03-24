@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
+	"datcomtd/backend/endpoints/booking"
 	"datcomtd/backend/endpoints/document"
 	"datcomtd/backend/endpoints/product"
 	"datcomtd/backend/endpoints/token"
@@ -53,6 +54,12 @@ func main() {
 	router.POST("/api/product/delete", product.DeleteProduct)
 	router.POST("/api/product/:id/photo/:name/add", product.PhotoAdd)
 	router.GET("/api/product/:id/photo/:name/delete", product.PhotoDelete)
+
+	// Booking endpoints
+	router.GET("/api/bookings", booking.View)
+	router.GET("/api/booking/by-day/:day", booking.ViewByDay)
+	router.POST("/api/booking/create", booking.Create)
+	router.POST("/api/booking/delete", booking.Delete)
 
 	router.Run("localhost:8000")
 }

@@ -75,3 +75,19 @@ type Product struct {
 	CreatedBy     string `json:"created-by"`
 	LastUpdatedBy string `json:"last-updated-by"`
 }
+
+type Booking struct {
+	CreatedAt time.Time
+
+	ID uint `json:"id" gorm:"primaryKey"`
+
+	TimestampStart time.Time `json:"time-start"`
+	TimestampEnd   time.Time `json:"time-end"`
+	Description    string    `json:"description"`
+
+	Day string
+
+	Username string `json:"username"`
+	Role     uint   `json:"role"`
+	Course   uint   `json:"course"`
+}

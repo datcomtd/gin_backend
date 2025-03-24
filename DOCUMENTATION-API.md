@@ -36,6 +36,13 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 | [/api/product/\<id\>/photo/\<name\>/add](#product-photo-add)  | POST    | o     | x    |
 | [/api/product/\<id\>/photo/\<name\>/delete](#product-photo-delete)  | GET     | o     | x    |
 
+| BOOKING Endpoint                              | Request | Token | Auth |
+|:----------------------------------------------|:-------:|:-----:|:----:|
+| [/api/bookings](#booking-read-all)            | GET     | x     | x    |
+| [/api/booking/by-day/\<day\>](#booking-read-day) | GET  | x     | x    |
+| [/api/booking/create](#booking-create)        | POST    | o     | x    |
+| [/api/booking/delete](#booking-delete)        | POST    | o     | x    |
+
 ---
 
 ### USER endpoints
@@ -820,6 +827,139 @@ $ curl -s -L http://localhost:8000/api/product/1/photo/first/delete | jq '.'
 | 404    | Not Found       | product not found |
 | 500    | Internal Error  | failed deleting the file |
 | 500    | Internal Error  | failed updating the record |
+| 200    | OK              | - |
+
+### BOOKING endpoints
+
+<h4 id="booking-read-all">
+:book:&nbsp;&nbsp;/api/bookings
+</h4>
+
+Obtém a lista de todos os bookings.
+
+```bash
+$ curl -s -L http://localhost:8000/api/bookings | jq '.'
+```
+
+```json
+{
+  "count": 1,
+  "booking": [
+    {
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "id": 1,
+      "time-start": "...",
+      "time-end": "...",
+      "description": "",
+      "username": "patrick",
+      "role": 1,
+      "course": 1
+    }
+  ]
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 200    | OK             | - |
+
+<h4 id="booking-read-day">
+:book:&nbsp;&nbsp;/api/bookings/by-day/&lt;day&gt;
+</h4>
+
+Obtém a lista de todos os bookings em um determinado dia.
+
+```bash
+$ curl -s -L http://localhost:8000/api/booking/by-day/2001-01-01 | jq '.'
+```
+
+```json
+{
+  "count": 1,
+  "booking": [
+    {
+      "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
+      "id": 1,
+      "time-start": "...",
+      "time-end": "...",
+      "description": "",
+      "username": "patrick",
+      "role": 1,
+      "course": 1
+    }
+  ]
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 200    | OK             | - |
+
+<h4 id="booking-create">
+:book:&nbsp;&nbsp;/api/booking/create
+</h4>
+
+Registra um novo booking.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| time-start   | time   | yes |
+| time-end     | time   | yes |
+| description  | string | yes |
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: application/json" \
+  -d "..." \
+  http://localhost:8000/api/booking/create | jq '.'
+```
+
+```json
+{
+  "message": "booking created"
+}
+```
+
+| Código | Status         | Message |
+|:------:|:--------------:|:--------|
+| 400    | Bad Request    | required fields are not filled |
+| 400    | Bad Request    | a meeting is already booked |
+| 403    | Forbidden      | user does not have permission |
+| 500    | Internal Error | failed creating the record |
+| 201    | Created        | - |
+
+<h4 id="booking-delete">
+:book:&nbsp;&nbsp;/api/booking/delete
+</h4>
+
+Deleta um booking.
+
+| Field | Type | Required |
+|:-----:|:----:|:--------:|
+| id    | integer | yes   |
+
+```bash
+$ curl -s -L -X POST \
+  -H "Authorization: <token>" \
+  -H "Content-Type: application/json" \
+  -d "{\"id\": 1}" \
+  http://localhost:8000/api/booking/delete | jq '.'
+```
+
+```json
+{
+  "message": "booking deleted"
+}
+```
+
+| Código | Status          | Message |
+|:------:|:---------------:|:-------:|
+| 400    | Bad Request     | required fields are not filled |
+| 401    | Unauthorized    | invalid token |
+| 403    | Forbidden       | user does not have permission |
+| 404    | Not Found       | booking not found |
+| 500    | Internal Error  | failed deleting the record |
 | 200    | OK              | - |
 
 ## TODO

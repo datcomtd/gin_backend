@@ -13,6 +13,8 @@ var DATCOM_DOCKER bool = false
 var ENUM_DATCOM_ROLE_MEMBER uint = 5   // datcom member, maximum value for user.Role
 var ENUM_DATCOM_COURSE_MEMBER uint = 2 // datcom course, maximum value for user.Course
 
+var ENUM_CA_COURSE uint = 5 // maximum value for user.Course for Bookings
+
 var TOKEN_EXPIRES_HOURS float64 = 168 // expiration time for the token in hours
 var SIZE_DOCUMENT_KEY int8 = 8        // document upload key size
 

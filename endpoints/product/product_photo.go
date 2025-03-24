@@ -47,14 +47,14 @@ func PhotoAdd(c *gin.Context) {
 	}
 
 	// 1. check if the token is valid
-	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, usercourse, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
 	// 2. check if the user has permission to upload a product photo
-	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER || usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}
@@ -115,14 +115,14 @@ func PhotoDelete(c *gin.Context) {
 	}
 
 	// 1. check if the token is valid
-	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, usercourse, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
 	// 2. check if the user has permission to delete a product photo
-	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER || usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}

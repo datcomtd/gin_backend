@@ -46,7 +46,7 @@ func DeleteDocument(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid
-	username, _, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, _, _, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return

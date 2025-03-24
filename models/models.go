@@ -8,16 +8,18 @@ import (
 
 const (
 	President uint = 1
-	Vice_CC        = 2
-	Vice_TSI       = 3
-	Secretary      = 4
-	Treasurer      = 5
-	Director       = 6
+	Vice           = 2
+	Secretary      = 3
+	Treasurer      = 4
+	Director       = 5
 )
 
 const (
-	COMP uint = 1
-	TSI       = 2
+	COMP  uint = 1
+	TSI        = 2
+	ELET       = 3
+	CIVIL      = 4
+	EBB        = 5
 )
 
 type User struct {

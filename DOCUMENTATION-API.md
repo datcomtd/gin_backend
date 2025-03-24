@@ -45,22 +45,24 @@ As rotas (endpoints) implementadas estão listadas nas tabelas abaixo:
 </h4>
 
 Registra um novo usuário no banco de dados.  
-Somente o Presidente pode registrar novos usuários.
+Somente o Presidente de Computação pode registrar novos usuários.
 
 | Enum | Role/Função |
 |:----:|:-----|
 | 1    | Presidente |
-| 2    | Vice de Computação |
-| 3    | Vice de TSI |
-| 4    | Secretário(a) |
-| 5    | Tesoureiro(a) |
-| 6    | Diretor(a) |
-| ≥ 7  | Outros |
+| 2    | Vice |
+| 3    | Secretário(a) |
+| 4    | Tesoureiro(a) |
+| 5    | Diretor(a) |
+| ≥ 6  | Outros |
 
 | Enum | Curso |
 |:----:|:------|
 | 1    | Computação |
 | 2    | TSI |
+| 3    | Eletrônica |
+| 4    | Civil |
+| 5    | Bioprocessos e Biotecnologia |
 
 | Field | Type | Required |
 |:-----:|:----:|:--------:|

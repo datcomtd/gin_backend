@@ -42,7 +42,7 @@ func UpdateDocument(c *gin.Context) {
 	c.Bind(&body)
 
 	// 1. check if the token exists
-	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, usercourse, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
@@ -55,7 +55,7 @@ func UpdateDocument(c *gin.Context) {
 	}
 
 	// 3. check if the user has permission
-	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER || usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}

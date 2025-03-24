@@ -57,14 +57,14 @@ func GenerateKey(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid and get the token's username
-	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, usercourse, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
 	// 3. check if the user has permission to upload a document
-	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER || usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}
@@ -109,14 +109,14 @@ func UploadDocument(c *gin.Context) {
 	var document models.Document
 
 	// 1. check if the token is valid
-	username, userrole, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, userrole, usercourse, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
 	}
 
 	// 2. check if the user has permission to upload a document
-	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER {
+	if userrole > initializers.ENUM_DATCOM_ROLE_MEMBER || usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
 		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
 		return
 	}

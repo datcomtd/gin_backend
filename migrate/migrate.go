@@ -14,4 +14,5 @@ func main() {
 	initializers.DB.AutoMigrate(&models.User{})
 	initializers.DB.AutoMigrate(&models.Document{})
 	initializers.DB.AutoMigrate(&models.Product{})
+	initializers.DB.AutoMigrate(&models.Booking{})
 }

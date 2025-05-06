@@ -8,6 +8,7 @@ import (
 	"datcomtd/backend/endpoints/product"
 	"datcomtd/backend/endpoints/token"
 	"datcomtd/backend/endpoints/user"
+	"datcomtd/backend/endpoints/dashboard"
 
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/utils"
@@ -61,5 +62,10 @@ func main() {
 	router.POST("/api/booking/create", booking.Create)
 	router.POST("/api/booking/delete", booking.Delete)
 
-	router.Run("localhost:8000")
+	// dashboard endpoints
+	router.GET("/api/booking/week", booking.GetCurrentWeekBookings)
+	router.GET("/api/document/last", document.GetLastTenDocuments)
+	router.GET("/api/dashboard/counters", dashboard.GetCounts)
+
+	router.Run("0.0.0.0:8000")
 }

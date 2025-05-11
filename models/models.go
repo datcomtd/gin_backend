@@ -23,14 +23,16 @@ const (
 )
 
 type User struct {
-	CreatedAt time.Time
-	UpdateAt  time.Time
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+
+	ID uint `json:"id" gorm:"primaryKey"`
 
 	Token_UpdatedAt time.Time
 	Token           string
 	Password        string
 
-	Username string `json:"name" gorm:"primaryKey"`
+	Username string `json:"name"`
 	Email    string `json:"email"`
 
 	Role   uint   `json:"role"`
@@ -39,8 +41,8 @@ type User struct {
 }
 
 type Document struct {
-	CreatedAt time.Time
-	UpdateAt  time.Time
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 
 	ID  uint `json:"id" gorm:"primaryKey"`
 	Key string
@@ -57,8 +59,8 @@ type Document struct {
 }
 
 type Product struct {
-	CreatedAt time.Time
-	UpdateAt  time.Time
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 
 	ID uint `json:"id" gorm:"primaryKey"`
 
@@ -77,9 +79,10 @@ type Product struct {
 }
 
 type Booking struct {
-	CreatedAt time.Time
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 
-	ID uint `json:"id" gorm:"primaryKey"`
+	ID 	uint `json:"id" gorm:"primaryKey"`
 
 	TimestampStart time.Time `json:"time-start"`
 	TimestampEnd   time.Time `json:"time-end"`
@@ -90,4 +93,7 @@ type Booking struct {
 	Username string `json:"username"`
 	Role     uint   `json:"role"`
 	Course   uint   `json:"course"`
+
+	CreatedBy     string `json:"created-by"`
+	LastUpdatedBy string `json:"last-updated-by"`
 }

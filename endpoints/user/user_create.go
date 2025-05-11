@@ -7,6 +7,7 @@ import (
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
 	"datcomtd/backend/utils"
+	"datcomtd/backend/authentication/token"
 
 	"net/http"
 	"strings"
@@ -103,6 +104,86 @@ func Register(c *gin.Context) {
 		Role:   body.Role,
 		Course: body.Course,
 		RA:     body.RA,
+
+		UpdatedAt:    time.Now(),
+		CreatedAt:    time.Now(),
+	}
+	// 7.2. insert the model into the database
+	result = initializers.DB.Create(&user)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed creating the record"})
+		return
+	}
+
+	// 8. if role is President, update ADMIN credentials
+	if user.Role == models.President {
+		initializers.Admin = &user
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"user": user})
+}
+
+func Create(c *gin.Context) {
+	var body user_registerRequest
+	var user models.User
+
+	// 0. retrieve post data
+	c.Bind(&body)
+
+	// 1. check if the required fields are filled
+	if (body.Password == "") || (body.Username == "") || (body.Role == 0) || (body.Course == 0) ||
+		(body.AdminUsername == "") || (body.AdminPassword == "") {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "required fields are not filled"})
+		return
+	}
+
+	username, role, course, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	if username == "" {
+		c.JSON(errCode, gin.H{"message": errString})
+		return
+	}
+
+	if role > models.President || course > 2 {
+		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
+		return
+	}
+
+	// 4. check if the course value is valid
+	if body.Course > 2 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid course"})
+		return
+	}
+
+	// 5. check if the user is already registered
+	result := initializers.DB.Where("username = ?", strings.ToLower(body.Username)).First(&user)
+	if result.Error == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "user is already registered"})
+		return
+	}
+
+	// 6. hash the body password
+	hashedPassword, err := authentication.HashPassword(body.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed hashing the password"})
+		return
+	}
+
+	// 7. create the record in the database
+	// 7.1. create the model for insertion
+	user = models.User{
+		Token_UpdatedAt: time.Now().UTC(),
+		Token:           utils.RandomString(64),
+		Password:        hashedPassword,
+
+		Username: strings.ToLower(body.Username),
+		Email:    body.Email,
+
+		Role:   body.Role,
+		Course: body.Course,
+		RA:     body.RA,
+
+		UpdatedAt:    time.Now(),
+		CreatedAt:    time.Now(),
 	}
 	// 7.2. insert the model into the database
 	result = initializers.DB.Create(&user)

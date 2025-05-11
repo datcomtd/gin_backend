@@ -78,6 +78,9 @@ func Create(c *gin.Context) {
 		Username: username,
 		Role:     userrole,
 		Course:   usercourse,
+
+		UpdatedAt:    time.Now(),
+		CreatedAt:   time.Now(),
 	}
 	// 5.1. create
 	result := initializers.DB.Create(&booking)
@@ -86,5 +89,6 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "booking created"})
+
+	c.JSON(http.StatusCreated, gin.H{"message": "booking created", "id": booking.ID})
 }

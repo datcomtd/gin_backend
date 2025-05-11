@@ -9,6 +9,7 @@ import (
 	"datcomtd/backend/models"
 	"datcomtd/backend/utils"
 
+	"time"
 	"net/http"
 )
 
@@ -93,6 +94,8 @@ func GenerateKey(c *gin.Context) {
 		Category:      body.Category,
 		CreatedBy:     username,
 		LastUpdatedBy: username,
+		UpdatedAt:     time.Now(),
+		CreatedAt:     time.Now(),
 	}
 	// 5.2. insert the model into the database
 	result = initializers.DB.Create(&document)

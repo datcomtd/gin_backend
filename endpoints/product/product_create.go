@@ -6,6 +6,7 @@ import (
 	"datcomtd/backend/authentication/token"
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
+	"time"
 
 	"net/http"
 )
@@ -23,9 +24,11 @@ import (
 type product_createRequest struct {
 	Body string
 
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Category    string `json:"category"`
+	Title       string 	`json:"title"`
+	Description string 	`json:"description"`
+	Category    string 	`json:"category"`
+	Count	    int		`json:"count"`
+
 
 	Price float64 `json:"price"`
 }
@@ -70,11 +73,14 @@ func CreateProduct(c *gin.Context) {
 		Description: body.Description,
 		Category:    body.Category,
 
-		Price:   body.Price,
+		Price:   	 body.Price,
 		InStock: true,
+		Count:   	 body.Count,
 
 		CreatedBy:     username,
 		LastUpdatedBy: username,
+		UpdatedAt:    time.Now(),
+		CreatedAt:   time.Now(),
 	}
 	// 5.1. create
 	result = initializers.DB.Create(&product)
@@ -83,5 +89,5 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "product created"})
+	c.JSON(200, gin.H{"message": "product created", "id": product.ID})
 }

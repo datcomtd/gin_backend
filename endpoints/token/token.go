@@ -6,7 +6,7 @@ import (
 	"datcomtd/backend/authentication"
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
-	"datcomtd/backend/utils"
+	"github.com/golang-jwt/jwt/v5"
 
 	"net/http"
 	"time"
@@ -61,18 +61,24 @@ func GetToken(c *gin.Context) {
 		return
 	}
 
-	// 4. check if the user's token is expired, if so, generate a new one
-	if time.Now().UTC().Sub(user.Token_UpdatedAt).Hours() > initializers.TOKEN_EXPIRES_HOURS {
-		// 4-A.1. generate a new token
-		user.Token_UpdatedAt = time.Now().UTC()
-		user.Token = utils.RandomString(64)
-		// 4-A.2. update the user record in the database
-		result = initializers.DB.Model(&user).Updates(user)
-		if result.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed updating the record"})
-			return
-		}
+	// generate a new token jwt
+	token, err := GenerateJWT(user.ID, user.Username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "error generating token"})
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": user.Token})
+	c.JSON(http.StatusOK, gin.H{"token": token, "user": user})
+}
+
+
+func GenerateJWT(userID uint, username string) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id": userID,
+		"username": username,
+		"iat":     time.Now().Unix(),
+		"exp":     time.Now().Add(time.Hour).Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte("Datcom@td2025#"))
 }

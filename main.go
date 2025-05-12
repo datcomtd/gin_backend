@@ -36,6 +36,7 @@ func main() {
 	router.POST("/api/user/update", user.UpdateUser)
 	router.POST("/api/user/delete", user.DeleteUser)
 	router.POST("/api/user/picture", user.UploadPicture)
+	router.POST("/api/user/create", user.Create)
 
 	// Document endpoints
 	router.GET("/api/documents", document.GetDocuments)

@@ -27,6 +27,10 @@ type booking_createReq struct {
 	TimestampStart time.Time `json:"time-start"`
 	TimestampEnd   time.Time `json:"time-end"`
 	Description    string    `json:"description"`
+
+	Title    string `json:"title"`
+	Location string `json:"location"`
+	Private  bool   `json:"private"`
 }
 
 func Create(c *gin.Context) {
@@ -49,12 +53,6 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	// 3. check if the user has permission to create a booking
-	if usercourse > initializers.ENUM_DATCOM_COURSE_MEMBER {
-		c.JSON(http.StatusForbidden, gin.H{"message": "user does not have permission"})
-		return
-	}
-
 	// 4. check if a booking is already taking place
 	var count int64
 	initializers.DB.Model(&models.Booking{}).Where("(start_time < ? AND end_time > ?) OR (start_time >= ? AND start_time < ?)",
@@ -74,6 +72,9 @@ func Create(c *gin.Context) {
 		Day: body.TimestampStart.Format("2001-01-01"),
 
 		Description: body.Description,
+		Title:       body.Title,
+		Location:    body.Location,
+		Private:     body.Private,
 
 		Username: username,
 		Role:     userrole,

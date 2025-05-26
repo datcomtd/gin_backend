@@ -10,7 +10,8 @@ var bookings = []models.Booking{
     {
         TimestampStart: time.Date(2025, 5, 6, 10, 0, 0, 0, time.UTC),
         TimestampEnd:   time.Date(2025, 5, 6, 12, 0, 0, 0, time.UTC),
-        Description:    "Team Meeting",
+        Title:         "Team Meeting",
+        Description: "Discuss project updates and next steps.",
         Day:           "Monday",
         Username:      "admin",
         Role:         1,
@@ -19,7 +20,8 @@ var bookings = []models.Booking{
     {
         TimestampStart: time.Date(2025, 5, 6, 14, 0, 0, 0, time.UTC),
         TimestampEnd:   time.Date(2025, 5, 6, 16, 0, 0, 0, time.UTC),
-        Description:    "Project Discussion",
+        Title:         "Project Discussion",
+        Description: "Discuss project updates and next steps.",
         Day:           "Monday",
         Username:      "john_doe",
         Role:         3,

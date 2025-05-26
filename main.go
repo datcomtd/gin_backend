@@ -22,6 +22,8 @@ func init() {
 func main() {
 	router := gin.Default()
 
+	router.Static("/media", "./media")
+
 	// CORS - Cross Origin Resource Share
 	// default permite todas as origens
 	router.Use(utils.CORSMiddleware())
@@ -60,6 +62,7 @@ func main() {
 	// Booking endpoints
 	router.GET("/api/bookings", booking.View)
 	router.GET("/api/booking/by-day/:day", booking.ViewByDay)
+	router.GET("/api/booking/by-id/:id", booking.ViewById)
 	router.POST("/api/booking/create", booking.Create)
 	router.POST("/api/booking/delete", booking.Delete)
 

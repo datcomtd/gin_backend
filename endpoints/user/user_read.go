@@ -24,10 +24,22 @@ type public_User struct {
 
 	Role   uint `json:"role"`
 	Course uint `json:"course"`
+	RA     string `json:"ra"`
+}
+
+type public_User_profile struct {
+	Username string `json:"name"`
+	Email    string `json:"email"`
+
+	Role   		uint `json:"role"`
+	Course 		uint `json:"course"`
+	RA     		string `json:"ra"`
+	Picture 	string `json:"picture"`
+	CreatedAt 	string `json:"created_at"`
 }
 
 func GetUsers(c *gin.Context) {
-	var users []public_User
+	var users []models.User
 
 	// 1. get all user records
 	result := initializers.DB.Model(&models.User{}).Find(&users)
@@ -38,7 +50,7 @@ func GetUsers(c *gin.Context) {
 }
 
 func GetUserByUsername(c *gin.Context) {
-	var user public_User
+	var user models.User
 
 	// 1. get the user record
 	username := c.Param("username")

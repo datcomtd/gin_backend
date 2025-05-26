@@ -46,7 +46,7 @@ func DeleteDocument(c *gin.Context) {
 	}
 
 	// 2. check if the token is valid
-	username, _, _, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
+	username, role, course, errCode, errString := token.VerifyToken(c.GetHeader("Authorization"))
 	if username == "" {
 		c.JSON(errCode, gin.H{"message": errString})
 		return
@@ -61,7 +61,8 @@ func DeleteDocument(c *gin.Context) {
 
 	// 4. check if the token's user is the document creator or ADMIN authority
 	if body.AdminPassword == "" {
-		if username != document.CreatedBy {
+		// 4.A. check if the user is the document's creator or has the required role and course
+		if username != document.CreatedBy || (role != 1 && course < 2) {
 			c.JSON(http.StatusForbidden, gin.H{"message": "user is not the document's creator"})
 			return
 		}

@@ -50,24 +50,20 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	// 3. check if the password is correct or ADMIN authority
-	if body.AdminPassword == "" {
+	// 3. check if the password is correct or role is 1 (President) and course is 1 ou 2
+	if body.Password != "" {
+		// 3.0. hash the body password
 		bl := authentication.VerifyPassword(body.Password, user.Password)
 		if bl != true {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
 			return
 		}
-	} else {
-		// 3.B. ADMIN authority
+	} else if (user.Role == 1) && ((user.Course == 1) || (user.Course == 2)) {
+		// 3.1. check if the admin username is valid
 		if body.AdminUsername != initializers.Admin.Username {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
 			return
-		}
-		bl := authentication.VerifyPassword(body.AdminPassword, initializers.Admin.Password)
-		if bl != true {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid admin username or password"})
-			return
-		}
+		}	// 3.2. check if the admin password is correct
 	}
 
 	// 4. delete the user record

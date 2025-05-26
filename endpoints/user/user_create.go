@@ -149,7 +149,7 @@ func Create(c *gin.Context) {
 	}
 
 	// 4. check if the course value is valid
-	if body.Course > 2 {
+	if body.Course > 7 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid course"})
 		return
 	}
@@ -161,8 +161,11 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	// generate a random lower case password
+	customPassword := utils.RandomString(8)
+
 	// 6. hash the body password
-	hashedPassword, err := authentication.HashPassword(body.Password)
+	hashedPassword, err := authentication.HashPassword(customPassword)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed hashing the password"})
 		return
@@ -197,5 +200,5 @@ func Create(c *gin.Context) {
 		initializers.Admin = &user
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"user": user})
+	c.JSON(http.StatusCreated, gin.H{"user": user, "password": customPassword})
 }

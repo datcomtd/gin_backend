@@ -2,6 +2,9 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	"datcomtd/backend/initializers"
+	"datcomtd/backend/models"
+	"fmt"
 
 	"datcomtd/backend/authentication/token"
 
@@ -33,8 +36,19 @@ func UploadPicture(c *gin.Context) {
 		return
 	}
 
+	// get user record
+	var user models.User
+
+	result := initializers.DB.Where("username = ?", username).First(&user)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
+		return
+	}
+	id := fmt.Sprintf("%d", user.ID)
+
+
 	extension := filepath.Ext(file.Filename)
-	save_path := "./media/member/" + username + extension
+	save_path := "./media/member/" + id + extension
 
 	// 3. check if the file is valid
 	if extension != ".png" {

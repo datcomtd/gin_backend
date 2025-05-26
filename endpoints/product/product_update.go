@@ -32,7 +32,6 @@ type product_updateRequest struct {
 	Count       int    `json:"count"`
 
 	Price   float64 `json:"price"`
-	NoStock bool    `json:"no-stock"`
 	Stock   bool    `json:"stock"`
 }
 
@@ -92,13 +91,7 @@ func UpdateProduct(c *gin.Context) {
 	if body.Count != 0 {
 		product.Count = body.Count
 	}
-	// 5.5. stock
-	if body.NoStock != false {
-		product.InStock = false
-	}
-	if body.Stock != false {
-		product.InStock = true
-	}
+	product.InStock = body.Stock
 
 	// 6. update the product record in the database
 	result = initializers.DB.Model(&product).Updates(product)

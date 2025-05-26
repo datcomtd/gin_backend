@@ -69,7 +69,7 @@ func PhotoAdd(c *gin.Context) {
 	// 4. get the file
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid file"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -135,10 +135,10 @@ func PhotoDelete(c *gin.Context) {
 	}
 
 	// 4. delete the photo file
-	save_path := "./media/product" + product_id + "-" + photo_name
+	save_path := "./media/product/" + product_id + "-" + photo_name
 	err := os.Remove(save_path)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed deleting the file"})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

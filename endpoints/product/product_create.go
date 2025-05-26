@@ -7,6 +7,7 @@ import (
 	"datcomtd/backend/initializers"
 	"datcomtd/backend/models"
 	"time"
+	"fmt"
 
 	"net/http"
 )
@@ -28,6 +29,7 @@ type product_createRequest struct {
 	Description string 	`json:"description"`
 	Category    string 	`json:"category"`
 	Count	    int		`json:"count"`
+	InStock     bool    `json:"in_stock"`
 
 
 	Price float64 `json:"price"`
@@ -66,6 +68,9 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
+	// print body
+	fmt.Println(body)
+
 	// 5. create a new product record in the database
 	// 5.0. model
 	product = models.Product{
@@ -74,7 +79,7 @@ func CreateProduct(c *gin.Context) {
 		Category:    body.Category,
 
 		Price:   	 body.Price,
-		InStock: true,
+		InStock:     body.InStock,
 		Count:   	 body.Count,
 
 		CreatedBy:     username,

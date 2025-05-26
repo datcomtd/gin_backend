@@ -77,7 +77,7 @@ func GenerateJWT(userID uint, username string) (string, error) {
 		"user_id": userID,
 		"username": username,
 		"iat":     time.Now().Unix(),
-		"exp":     time.Now().Add(time.Hour).Unix(),
+		"exp":     time.Now().Add(time.Hour).Add(time.Hour).Add(time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte("Datcom@td2025#"))

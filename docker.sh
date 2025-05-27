@@ -42,7 +42,7 @@ function setup_backend() {
 
   docker run --name datcom-backend \
     --network host \
-    datcom-backend
+    -d datcom-backend
   if [ $? -ne 0 ] ; then
     echo "- ERROR while running the backend"
     exit 1

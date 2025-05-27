@@ -92,7 +92,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 {
   "user": {
     "CreatedAt": "2024-07-19T22:44:22.11276403-03:00",
-    "UpdateAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
     "Token_UpdatedAt": "2024-07-20T01:44:22.112720565Z",
     "Token": "VUVJsMvvLUSOicICknLsJpARmNnCXfAallxEeySjVksVsCadBDoGvQftSisiooXj",
     "Password": "$2a$14$r/3GZdaJFzCVyQAnNdhjm.Ya9IkR7pfwtRKgVzpc3661iQScPKnwS",
@@ -200,7 +200,7 @@ $ curl -s -L -X POST -H "Content-Type: application/json" \
 {
   "user": {
     "CreatedAt": "2024-07-20T02:32:21.950871021-03:00",
-    "UpdateAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
     "Token_UpdatedAt": "2024-07-20T05:32:21.95082028Z",
     "Token": "AMFXsITtGPFGSUaJvETnuSxwmRDHsTomsjBHJZKZYErYaagSeuEzfSpjeRdWSsGR",
     "Password": "$2a$14$KlOQnE10.KGjC2R0wsWaL.Vw75bLMIMztaDgKqvI7n4AJy4stmnT.",
@@ -299,7 +299,7 @@ $ curl -s -L http://localhost:8000/api/documents | jq '.'
   "document": [
     {
       "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
-      "UpdateAt": "0001-01-01T00:00:00Z",
+      "UpdatedAt": "0001-01-01T00:00:00Z",
       "id": 1,
       "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
       "title": "Simple Text File",
@@ -331,7 +331,7 @@ $ curl -s -L http://localhost:8000/api/document/by-id/1 | jq '.'
 {
   "document": {
       "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
-      "UpdateAt": "0001-01-01T00:00:00Z",
+      "UpdatedAt": "0001-01-01T00:00:00Z",
       "id": 1,
       "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
       "title": "Simple Text File",
@@ -363,7 +363,7 @@ $ curl -s -L http://localhost:8000/api/document/by-category/edital | jq '.'
 {
   "document": {
       "CreatedAt": "2024-07-20T11:55:30.107290365-03:00",
-      "UpdateAt": "0001-01-01T00:00:00Z",
+      "UpdatedAt": "0001-01-01T00:00:00Z",
       "id": 1,
       "Key": "nZKoUVWsWxHJqQillbJVjeZvmfdUQZvM",
       "title": "Simple Text File",
@@ -425,7 +425,7 @@ $ curl -s -L -X POST \
 {
   "document": {
     "CreatedAt": "2024-07-20T12:11:28.770287042-03:00",
-    "UpdateAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
     "id": 1,
     "Key": "kGVnythePZEOGjKHRIVdkzimYIWFHHQC",
     "filename": "senhor_dos_aneis.pdf",
@@ -486,7 +486,7 @@ $ curl -s -L -X POST \
 {
   "document": {
     "CreatedAt": "2024-07-20T12:11:28.770287042-03:00",
-    "UpdateAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
     "id": 1,
     "Key": "kGVnythePZEOGjKHRIVdkzimYIWFHHQC",
     "filename": "novo_nome.pdf",
@@ -565,7 +565,7 @@ $ curl -s -L http://localhost:8000/api/products | jq '.'
   "product": [
     {
       "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
-      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "UpdatedAt": "0000-12-31T23:58:45-00:01",
       "id": 1,
       "count": 0,
       "photos": null,
@@ -597,7 +597,7 @@ $ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
 {
   "product": {
       "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
-      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "UpdatedAt": "0000-12-31T23:58:45-00:01",
       "id": 1,
       "count": 0,
       "photos": null,
@@ -630,7 +630,7 @@ $ curl -s -L http://localhost:8000/api/product/by-id/1 | jq '.'
   "count": 1,
   "product": [
       "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
-      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "UpdatedAt": "0000-12-31T23:58:45-00:01",
       "id": 1,
       "count": 0,
       "photos": null,
@@ -715,7 +715,7 @@ $ curl -s -L -X POST \
 {
   "product": {
       "CreatedAt": "2024-08-14T19:04:08.910267+01:00",
-      "UpdateAt": "0000-12-31T23:58:45-00:01",
+      "UpdatedAt": "0000-12-31T23:58:45-00:01",
       "id": 1,
       "count": 0,
       "photos": null,

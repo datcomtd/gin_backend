@@ -5,6 +5,7 @@ WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
+RUN go mod tidy
 RUN go build -o /src/main /src/main.go
 EXPOSE 8000
 ENV GIN_MODE=debug

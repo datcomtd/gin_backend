@@ -7,6 +7,7 @@ import (
 	"datcomtd/backend/models"
 
 	"net/http"
+	"strconv"
 )
 
 //
@@ -19,13 +20,52 @@ import (
 
 func GetProducts(c *gin.Context) {
 	var products []models.Product
+	var totalCount int64
 
-	// 1. get all product records
-	result := initializers.DB.Model(&models.Product{}).Find(&products)
+	// Get pagination parameters
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 10
+	}
+	offset := (page - 1) * limit
+
+	// Get filter parameters
+	title := c.Query("title")
+	category := c.Query("category")
+
+	// Initialize DB query
+	query := initializers.DB.Model(&models.Product{})
+
+	// Apply title filter (partial match)
+	if title != "" {
+		query = query.Where("title ILIKE ?", "%"+title+"%")
+	}
+
+	// Apply category filter (exact match)
+	if category != "" {
+		query = query.Where("category = ?", category)
+	}
+
+	// Get total count of matching records
+	query.Count(&totalCount)
+
+	// Fetch paginated results
+	result := query.Limit(limit).Offset(offset).Find(&products)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"count":   result.RowsAffected,
-		"product": products})
+		"total_count": totalCount,
+		"page":        page,
+		"limit":       limit,
+		"products":    products,
+	})
 }
 
 func GetProductByID(c *gin.Context) {

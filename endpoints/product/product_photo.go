@@ -76,8 +76,8 @@ func PhotoAdd(c *gin.Context) {
 	extension := filepath.Ext(file.Filename)
 	save_path := "./media/product/" + product_id + "-" + photo_name + extension
 
-	// 5. check if the file is valid
-	if extension != ".png" {
+	// 5. check if the file is valid (png, jpg, jpeg)
+	if extension != ".png" && extension != ".jpg" && extension != ".jpeg" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid extension"})
 		return
 	}

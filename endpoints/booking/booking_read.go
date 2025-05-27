@@ -8,6 +8,7 @@ import (
 
 	"time"
 	"net/http"
+	"strconv"
 )
 
 //
@@ -20,13 +21,54 @@ import (
 
 func View(c *gin.Context) {
 	var bookings []models.Booking
+	var totalCount int64
 
-	// 1. get all booking records
-	result := initializers.DB.Model(&models.Booking{}).Find(&bookings)
+	// Get pagination parameters
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 10
+	}
+	offset := (page - 1) * limit
+
+	// Get date range parameters
+	startDateStr := c.Query("start_date")
+	endDateStr := c.Query("end_date")
+
+	// Initialize DB query
+	query := initializers.DB.Model(&models.Booking{})
+
+	// Apply date range filter if provided
+	if startDateStr != "" && endDateStr != "" {
+		startDate, err1 := time.Parse("2006-01-02", startDateStr)
+		endDate, err2 := time.Parse("2006-01-02", endDateStr)
+		if err1 == nil && err2 == nil && !startDate.After(endDate) {
+			query = query.Where("timestamp_start >= ? AND timestamp_end <= ?", startDate, endDate)
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date range"})
+			return
+		}
+	}
+
+	// Get total count of matching records
+	query.Count(&totalCount)
+
+	// Fetch paginated results
+	result := query.Limit(limit).Offset(offset).Find(&bookings)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"count":   result.RowsAffected,
-		"booking": bookings})
+		"total_count": totalCount,
+		"page":        page,
+		"limit":       limit,
+		"bookings":    bookings,
+	})
 }
 
 func ViewByDay(c *gin.Context) {

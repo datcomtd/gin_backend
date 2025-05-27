@@ -8,6 +8,7 @@ import (
 
 	"net/http"
 	"strings"
+	"strconv"
 )
 
 //
@@ -23,13 +24,52 @@ import (
 
 func GetDocuments(c *gin.Context) {
 	var documents []models.Document
+	var totalCount int64
 
-	// 1. get all document records
-	result := initializers.DB.Model(&models.Document{}).Find(&documents)
+	// Get pagination parameters
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 10
+	}
+	offset := (page - 1) * limit
+
+	// Get filter parameters
+	title := c.Query("title")
+	category := c.Query("category")
+
+	// Initialize DB query
+	query := initializers.DB.Model(&models.Document{})
+
+	// Apply title filter (partial match)
+	if title != "" {
+		query = query.Where("title ILIKE ?", "%"+title+"%")
+	}
+
+	// Apply category filter (exact match)
+	if category != "" {
+		query = query.Where("category = ?", category)
+	}
+
+	// Get total count of matching records
+	query.Count(&totalCount)
+
+	// Fetch paginated results
+	result := query.Limit(limit).Offset(offset).Find(&documents)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"count":    result.RowsAffected,
-		"document": documents})
+		"total_count": totalCount,
+		"page":        page,
+		"limit":       limit,
+		"documents":   documents,
+	})
 }
 
 func GetDocumentByID(c *gin.Context) {

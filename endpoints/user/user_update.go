@@ -118,7 +118,6 @@ func UpdateUser(c *gin.Context) {
 	if body.NewUsername != "" {
 		// replace blanck spaces with underscores and trim the string
 		body.NewUsername = strings.TrimSpace(body.NewUsername)
-		body.NewUsername = strings.ReplaceAll(body.NewUsername, " ", "-")
 		user.Username = strings.ToLower(body.NewUsername)
 	}
 

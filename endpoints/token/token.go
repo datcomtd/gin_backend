@@ -24,7 +24,7 @@ import (
 type TokenRequest struct {
 	Body string
 
-	Username string `json:"username"`
+	Email string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -36,33 +36,33 @@ func GetToken(c *gin.Context) {
 	c.Bind(&body)
 
 	// 1. check if the required fields are filled
-	if (body.Username == "") || (body.Password == "") {
+	if (body.Email == "") || (body.Password == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "required fields are not filled"})
 		return
 	}
 
 	// 2. check if the user exists
 	// 2.1. sql query
-	result := initializers.DB.Model(&models.User{}).Where("username = ?", body.Username).First(&user)
+	result := initializers.DB.Model(&models.User{}).Where("email = ?", body.Email).First(&user)
 	if result.Error != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid email or password"})
 		return
 	}
-	// 2.2. check if the username is valid
-	if body.Username != user.Username {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+	// 2.2. check if the email is valid
+	if body.Email != user.Email {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid email or password"})
 		return
 	}
 
 	// 3. check if the password is correct
 	bl := authentication.VerifyPassword(body.Password, user.Password)
 	if bl != true {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid username or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid email or password"})
 		return
 	}
 
 	// generate a new token jwt
-	token, err := GenerateJWT(user.ID, user.Username)
+	token, err := GenerateJWT(user.ID, user.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "error generating token"})
 		return
@@ -72,10 +72,10 @@ func GetToken(c *gin.Context) {
 }
 
 
-func GenerateJWT(userID uint, username string) (string, error) {
+func GenerateJWT(userID uint, email string) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userID,
-		"username": username,
+		"email": email,
 		"iat":     time.Now().Unix(),
 		"exp":     time.Now().Add(time.Hour).Add(time.Hour).Add(time.Hour).Unix(),
 	}

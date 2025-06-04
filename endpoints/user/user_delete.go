@@ -38,7 +38,7 @@ func DeleteUser(c *gin.Context) {
 	c.Bind(&body)
 
 	// 1. check if the required fields are filled
-	if (body.Username == "") || (body.Password == "") {
+	if body.Username == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "required fields are not filled"})
 		return
 	}

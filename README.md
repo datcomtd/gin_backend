@@ -37,9 +37,6 @@ $ ./docker.sh pg backend
 
 O servidor estará esperando por conexões em 127.0.0.1:8000.
 
-> [!CAUTION]
-> Caso esteja inicializando um container PostgreSQL via docker.sh, lembre-se de salvar o banco de dados antes de fazer qualquer outra operação pelo script (como reiniciar por exemplo).
-
 ## Instruções
 
 Instale as dependências:

@@ -18,6 +18,8 @@ function cleandocker() {
 }
 
 function setup_postgres() {
+  SETUP_DB=1
+
   docker run --name gin-postgres-db \
     -e POSTGRES_USER=postgres \
     -e POSTGRES_PASSWORD=postgres \
@@ -28,9 +30,6 @@ function setup_postgres() {
     echo "- ERROR while running the postgres database"
     exit 1
   fi
-
-  sleep 2
-  ./reset.sh
 }
 
 function setup_backend() {
@@ -69,6 +68,10 @@ while [ $# -gt 0 ] ; do
   "pg")
     setup_postgres
     ;;
+  "reset") ;&
+  "-r")
+    RESET_DB=1
+    ;;
   "backend") ;&
   "run")
     setup_backend
@@ -77,3 +80,5 @@ while [ $# -gt 0 ] ; do
 
   shift
 done
+
+if [ "${SETUP_DB}" ] && [ "${RESET_DB}" ] ; then ./reset.sh ; fi
